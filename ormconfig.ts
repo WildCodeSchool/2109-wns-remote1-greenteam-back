@@ -9,7 +9,7 @@ interface ConnOptions {
 
 // For MySQL DB (prod)
 const mysqlConfig: ConnOptions = {
-   type: 'sqlite',
+   type: 'mysql',
    host: 'localhost',
    port: 3306,
    username: 'test',
@@ -24,7 +24,7 @@ const sqliteConfig: ConnOptions = {
 };
 
 export default {
-  ...sqliteConfig,
+  ...mysqlConfig,
   synchronize: true,
   logging: false,
   entities: ['src/entity/**/*.ts'],
