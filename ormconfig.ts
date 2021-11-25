@@ -11,10 +11,10 @@ interface ConnOptions {
 const mysqlConfig: ConnOptions = {
    type: 'mysql',
    host: 'localhost',
-   port: 3306,
-   username: 'test',
-   password: 'test',
-   database: 'test',
+   port: 3307,
+   username: 'valere_collabee',
+   password: 'collabee',
+   database: 'collabee',
 };
 
 // For SQLite3 DB (dev)

@@ -1,8 +1,8 @@
 {
    "type": "mysql",
    "host": "localhost",
-   "port": 3306,
-   "username": "root",
+   "port": 3307,
+   "username": "valere_collabee",
    "password": "collabee",
    "database": "collabee",
    "synchronize": true,

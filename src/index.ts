@@ -3,6 +3,7 @@ import { ApolloServer } from 'apollo-server'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import {buildSchema} from 'type-graphql'
 import initConnectDb from './database/database';
+import UserResolver from "./resolvers/userresolver";
 
 
 const port =  process.env.PORT || 5000
@@ -10,7 +11,7 @@ async function bootstrap () {
 
     const connectBdd = await initConnectDb()
     const schema = await buildSchema({
-        resolvers: []
+        resolvers: [UserResolver]
     })
     // @ts-ignore
     const server = new ApolloServer({
