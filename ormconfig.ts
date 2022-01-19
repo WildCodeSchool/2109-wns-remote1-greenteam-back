@@ -1,8 +1,10 @@
+import {pass_db, pseudo_db, name_db, port_db} from "./src/settings"
+
 interface ConnOptions {
    type: string;
    database: string;
    host?: string;
-   port?: number;
+   port?: number | string;
    username?: string;
    password?: string;
 }
@@ -11,10 +13,10 @@ interface ConnOptions {
 const mysqlConfig: ConnOptions = {
    type: 'mysql',
    host: 'localhost',
-   port: 3307,
-   username: 'valere_collabee',
-   password: 'collabee',
-   database: 'collabee',
+   port: port_db,
+   username: pseudo_db,
+   password: pass_db,
+   database: name_db,
 };
 
 // For SQLite3 DB (dev)

@@ -3,16 +3,24 @@ import { ApolloServer } from 'apollo-server'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import {buildSchema} from 'type-graphql'
 import initConnectDb from './database/database';
-import UserResolver from "./resolvers/userresolver";
+
+import {port} from "./settings"
+import resolversGQL from "./resolvers/resolvers";
 
 
-const port =  process.env.PORT || 5000
+const portToListen =  port || 5000
 async function bootstrap () {
 
     const connectBdd = await initConnectDb()
     const schema = await buildSchema({
-        resolvers: [UserResolver]
+        resolvers: resolversGQL,
+        emitSchemaFile: {
+            path: __dirname + "/schema.gql",
+            commentDescriptions: true,
+            sortedSchema: false, // by default the printed schema is sorted alphabetically
+        },
     })
+
     // @ts-ignore
     const server = new ApolloServer({
         schema,
@@ -27,7 +35,7 @@ async function bootstrap () {
         }
     })
 
-    const {url} = await server.listen(port)
+    const {url} = await server.listen(portToListen)
     console.log(`Serveur lancé sur ${url}`)
 }
 

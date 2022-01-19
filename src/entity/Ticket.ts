@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Project from "./Project";
 import Sprint from "./Sprint";
+import Comment from "./Comment";
 
 @ObjectType()
 @Entity()
@@ -9,7 +10,7 @@ export default class Ticket{
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-    id: string
+    idTicket: number
 
     @Field()
     @Column()
@@ -31,10 +32,15 @@ export default class Ticket{
     @Column()
     status: number
 
-    @ManyToOne(() => Sprint, sprint => sprint.id)
+    @ManyToOne(() => Sprint, sprint => sprint.idSprint)
     sprint: Sprint
 
-    @ManyToOne(() => Project, project => project.id)
+    @ManyToOne(() => Project, project => project.idProject)
     project: Project
+
+    @OneToMany(() => Comment, comment => comment.ticket)
+    comments: Comment[]
+
+
 
 }
