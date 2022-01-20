@@ -5,6 +5,9 @@
 
 type Query {
   getOneUser(email: String!): User!
+  getAllUsers: [User!]!
+  getAllNotificationsByUser(email: String!): [Notification!]!
+  getAllCommentsByUser(email: String!): [Comment!]!
 }
 
 type User {
@@ -15,7 +18,25 @@ type User {
   age: Int!
 }
 
+type Notification {
+  idNotification: ID!
+  title: String!
+  description: String!
+  date: DateTime!
+}
+
+# The javascript `Date` as string. Type represents date and time as the ISO Date string.
+scalar DateTime
+
+type Comment {
+  idComment: ID!
+  content: String!
+}
+
 type Mutation {
+  addUser(age: Float!, email: String!, lastName: String!, firstName: String!): User!
+  updateUser(age: Float!, lastName: String!, firstName: String!, email: String!): User!
+  deleteUser(email: String!): User!
   login(password: String!, email: String!): UserResponse!
   register(age: Float!, firstname: String!, lastname: String!, password: String!, email: String!): UserResponse!
 }

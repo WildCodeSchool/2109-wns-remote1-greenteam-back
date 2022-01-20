@@ -43,7 +43,7 @@ async function bootstrap () {
 bootstrap()
 
 
-
+/*
 createConnection().then(async connection => {
 
     console.log("Inserting a new user into the database...");
@@ -60,4 +60,4 @@ createConnection().then(async connection => {
 
     console.log("Here you can setup and run express/koa/any other framework.");
 
-}).catch(error => console.log(error));
+}).catch(error => console.log(error)); */
