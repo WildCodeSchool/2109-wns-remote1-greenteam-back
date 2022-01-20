@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
 import {ObjectType, Field, ID} from 'type-graphql'
 import User from "./User";
@@ -10,11 +10,7 @@ export default class Notification {
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-<<<<<<< HEAD
-    id: number
-=======
     idNotification: number
->>>>>>> ad6780cf97754d6ee7b419f4b6a4da5b3ad6d377
 
     @Field()
     @Column()

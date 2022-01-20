@@ -21,7 +21,7 @@ export default class NotificationResolver {
     getOneNotification(@Arg("id") id:number){
         const notificationRepository:Repository<Notification> = getRepository(Notification);
         const notification = notificationRepository.createQueryBuilder("notification")
-        .where("notification.id = :id", {id}).getOne();
+        .where("notification.idNotification = :id", {id}).getOne();
         return notification;
     }
 

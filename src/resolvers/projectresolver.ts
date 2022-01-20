@@ -28,7 +28,7 @@ export default class ProjectResolver {
     getOneProject(@Arg("id") id:number){
         const projectRepository:Repository<Project> = getRepository(Project);
         const project = projectRepository.createQueryBuilder("project")
-        .where("project.id = :id", {id}).getOne();
+        .where("project.idProject = :id", {id}).getOne();
         return project;
     }
 

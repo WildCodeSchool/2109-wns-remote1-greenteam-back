@@ -4,11 +4,6 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import {buildSchema} from 'type-graphql'
 import { createConnection } from "typeorm";
 import initConnectDb from './database/database';
-<<<<<<< HEAD
-import UserResolver from "./resolvers/userresolver";
-import User from "./entity/User";
-=======
->>>>>>> ad6780cf97754d6ee7b419f4b6a4da5b3ad6d377
 
 import {port} from "./settings"
 import resolversGQL from "./resolvers/resolvers";

@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
 import {ObjectType, Field, ID} from 'type-graphql';
 import Ticket from './Ticket';

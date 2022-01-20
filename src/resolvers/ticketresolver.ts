@@ -25,7 +25,7 @@ export default class TicketResolver {
     getOneProject(@Arg("id") id:number){
         const ticketRepository:Repository<Ticket> = getRepository(Ticket);
         const ticket = ticketRepository.createQueryBuilder("ticket")
-        .where("ticket.id = :id", {id}).getOne();
+        .where("ticket.idTicket = :id", {id}).getOne();
         return ticket;
     }
 

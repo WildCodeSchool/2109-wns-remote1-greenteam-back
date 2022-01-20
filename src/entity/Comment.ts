@@ -1,4 +1,5 @@
-import { Field, ID, ObjectType } from "type-graphql";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Ticket from "./Ticket";
 import User from "./User";
@@ -20,5 +21,5 @@ export default class Comment {
 
     @Field()
     @Column()
-    comment: string
+    content: string
 }

@@ -29,7 +29,7 @@ export default class SprintResolver {
     getOneSprint(@Arg("id") id:number){
         const sprintRepository:Repository<Sprint> = getRepository(Sprint);
         const sprint = sprintRepository.createQueryBuilder("sprint")
-        .where("sprint.id = :id", {id}).getOne();
+        .where("sprint.idSprint = :id", {id}).getOne();
         return sprint;
     }
 

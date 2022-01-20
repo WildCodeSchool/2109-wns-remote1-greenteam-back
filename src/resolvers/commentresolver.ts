@@ -26,7 +26,7 @@ export default class CommentResolver {
     getOneComment(@Arg("id") id:number){
         const commentRepository:Repository<Comment> = getRepository(Comment);
         const comment = commentRepository.createQueryBuilder("comment")
-        .where("comment.id = :id", {id}).getOne();
+        .where("comment.idComment = :id", {id}).getOne();
         return comment;
     }
 
@@ -56,7 +56,7 @@ export default class CommentResolver {
     }
 
     @Mutation(returns => Comment)
-    createComment(@Arg("user") user:User, @Arg("ticket") ticket:Ticket, @Arg("content") content:string){
+    createComment(@Arg("user") user:User, @Arg("ticket") ticket:Ticket, @Arg("comment") content:string){
         const commentRepository:Repository<Comment> = getRepository(Comment);
         const comment = commentRepository.create({
             user,
@@ -97,9 +97,9 @@ export default class CommentResolver {
     }
 
     @Mutation(returns => Comment)
-    updateComment(@Arg("id") id: number, @Arg("content") content:string){
+    updateComment(@Arg("idComment") idComment: number, @Arg("content") content:string){
         const commentRepository:Repository<Comment> = getRepository(Comment);
-        const comment = commentRepository.update({id}, {content});
+        const comment = commentRepository.update({idComment}, {content});
         return comment;
     }
 
