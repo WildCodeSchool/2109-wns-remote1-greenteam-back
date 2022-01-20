@@ -3,10 +3,11 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
 import {ObjectType, Field, ID} from 'type-graphql'
 import User from "./User";
+import Ticket from "./Ticket";
 
 @ObjectType()
 @Entity()
-export default class Notification {
+export default class Comment {
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
@@ -14,17 +15,12 @@ export default class Notification {
 
     @Field()
     @Column()
-    title: string
-
-    @Field()
-    @Column()
-    description: string
-
-    @Field()
-    @Column()
-    date: Date
+    content: string
 
     @ManyToOne(() => User, user => user.idUser)
     user: User
+
+    @ManyToOne(() => Ticket, ticket => ticket.id)
+    ticket: Ticket
 
 }

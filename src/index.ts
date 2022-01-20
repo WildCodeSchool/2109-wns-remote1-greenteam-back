@@ -2,8 +2,10 @@ import "reflect-metadata";
 import { ApolloServer } from 'apollo-server'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import {buildSchema} from 'type-graphql'
+import { createConnection } from "typeorm";
 import initConnectDb from './database/database';
 import UserResolver from "./resolvers/userresolver";
+import User from "./entity/User";
 
 
 const port =  process.env.PORT || 5000
@@ -34,7 +36,7 @@ async function bootstrap () {
 bootstrap()
 
 
-/*
+
 createConnection().then(async connection => {
 
     console.log("Inserting a new user into the database...");
@@ -43,7 +45,7 @@ createConnection().then(async connection => {
     user.lastName = "Saw";
     user.age = 25;
     await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+    console.log(`Saved a new user with id: ${user.idUser}`);
 
     console.log("Loading users from the database...");
     const users = await connection.manager.find(User);
@@ -52,4 +54,3 @@ createConnection().then(async connection => {
     console.log("Here you can setup and run express/koa/any other framework.");
 
 }).catch(error => console.log(error));
-*/

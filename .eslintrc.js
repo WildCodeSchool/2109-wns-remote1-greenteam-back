@@ -13,6 +13,10 @@ module.exports = {
     tsconfigRootDir: './',
   },
   plugins: ['@typescript-eslint', 'prettier'],
-  rules: { 'no-underscore-dangle': ['error', { allow: ['_id'] }] },
+  rules: {
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
+    'no-unused-vars': ['error', { varsIgnorePattern: 'returns' }],
+    'import/no-cycle': 'off',
+  },
   ignorePatterns: ['.eslintrc.js'],
 };

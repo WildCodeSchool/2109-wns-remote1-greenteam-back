@@ -1,10 +1,11 @@
-
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Project from "./Project";
 import User from "./User";
 
-enum UserRole {
+export enum UserRole {
     DEVELOPER = "developer",
     ADMIN = "admin",
     PRODUCT_MANAGER = "project_manager"

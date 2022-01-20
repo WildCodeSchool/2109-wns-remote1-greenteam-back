@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Project from "./Project";
@@ -9,7 +11,7 @@ export default class Ticket{
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-    id: string
+    id: number
 
     @Field()
     @Column()
