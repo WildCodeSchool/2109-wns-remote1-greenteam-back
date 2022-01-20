@@ -1,9 +1,11 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType, Int } from "type-graphql";
+import * as jwt from "jsonwebtoken"
+import * as bcrypt  from "bcrypt"
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import Comment from "./Comment";
 import Notification from "./Notification";
 import Comment from "./Comment";
+
 
 @ObjectType()
 @Entity()
@@ -25,14 +27,45 @@ export default class User {
     @Column()
     email: string
 
-    @Field()
+    @Field(type => Int)
     @Column()
     age: number;
+
+    @Column()
+    password: string
 
     @OneToMany(() => Notification, notification => notification.user)
     notifications : Notification[]
 
     @OneToMany(() => Comment, comment => comment.user)
+<<<<<<< HEAD
     comments : Comment[]
+=======
+    comments: Comment[]
+
+    async encryptPassword(password: string) {
+        return bcrypt.hash(password, 10)
+    }
+
+    async verifyPassword(password: string){
+
+        return await bcrypt.compare(password, this.password)
+    }
+
+    generateToken() {
+        const payload = {
+            id: this.idUser,
+            email: this.email,
+            lastName: this.lastName,
+            firstName: this.firstName,
+            age: this.age,
+            notifications: this.notifications
+        }
+
+        const token = jwt.sign(payload, "collabee", { algorithm: 'HS256', expiresIn: "1y" })
+        console.log(token)
+        return token
+    }
+>>>>>>> ad6780cf97754d6ee7b419f4b6a4da5b3ad6d377
 
 }

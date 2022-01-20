@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
-import {ObjectType, Field, ID} from 'type-graphql'
-import User from "./User";
+import { Field, ID, ObjectType } from "type-graphql";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Ticket from "./Ticket";
+import User from "./User";
+
 
 @ObjectType()
 @Entity()
@@ -11,16 +10,15 @@ export default class Comment {
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-    id: number
-
-    @Field()
-    @Column()
-    content: string
+    idComment: number
 
     @ManyToOne(() => User, user => user.idUser)
     user: User
 
-    @ManyToOne(() => Ticket, ticket => ticket.id)
-    ticket: Ticket
+    @ManyToOne(() => Ticket, ticket => ticket.idTicket)
+    ticket : Ticket
 
+    @Field()
+    @Column()
+    comment: string
 }
