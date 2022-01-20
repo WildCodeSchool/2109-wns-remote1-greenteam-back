@@ -50,6 +50,7 @@ export default class CommentResolver {
     getAllCommentsByUserAndTicket(@Arg("user") user:User, @Arg("ticket") ticket:number){
         const commentRepository:Repository<Comment> = getRepository(Comment);
         const comments = commentRepository.createQueryBuilder("comment")
+        .groupBy("comment.idComment")
         .where("comment.user = :user", {user})
         .andWhere("comment.ticket = :ticket", {ticket}).getMany();
         return comments;
