@@ -34,10 +34,10 @@ export default class Ticket{
     @Column()
     status: number
 
-    @ManyToOne(() => Sprint, sprint => sprint.idSprint)
+    @ManyToOne(() => Sprint, sprint => sprint.id)
     sprint: Sprint
 
-    @ManyToOne(() => Project, project => project.idProject)
+    @ManyToOne(() => Project, project => project.id)
     project: Project
 
     @OneToMany(() => Comment, comment => comment.ticket)

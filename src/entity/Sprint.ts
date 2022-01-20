@@ -10,7 +10,7 @@ export default class Sprint {
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-    idSprint: number
+    id: string
 
     @Field()
     @Column()

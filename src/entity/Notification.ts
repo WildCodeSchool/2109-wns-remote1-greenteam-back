@@ -10,7 +10,7 @@ export default class Notification {
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-    idNotification: number
+    id: string
 
     @Field()
     @Column()

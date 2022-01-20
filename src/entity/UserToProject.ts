@@ -25,7 +25,7 @@ export default class UserToProject {
     user: number
 
     @Field()
-    @ManyToOne(() => Project, project => project.idProject)
+    @ManyToOne(() => Project, project => project.id)
     project: number
 
     @Column({

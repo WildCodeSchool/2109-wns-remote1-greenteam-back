@@ -10,7 +10,7 @@ export default class Project {
 
     @Field(type => ID)
     @PrimaryGeneratedColumn()
-    idProject: number;
+    id: number;
 
     @Field()
     @Column()
