@@ -1,48 +1,54 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import { ObjectType, Field, ID } from "type-graphql";
-import Project from "./Project";
-import Sprint from "./Sprint";
-import Comment from "./Comment";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { ObjectType, Field, ID, InputType } from 'type-graphql';
+import Project from './Project';
+import Sprint from './Sprint';
+import Comment from './Comment';
 
 @ObjectType()
+@InputType('TicketInput')
 @Entity()
-export default class Ticket{
+export default class Ticket {
+  @Field((type) => ID)
+  @PrimaryGeneratedColumn()
+  idTicket: number;
 
-    @Field(type => ID)
-    @PrimaryGeneratedColumn()
-    idTicket: number
+  @Field()
+  @Column()
+  title: string;
 
-    @Field()
-    @Column()
-    title: string
+  @Field()
+  @Column()
+  description: string;
 
-    @Field()
-    @Column()
-    description: string
+  @Field()
+  @Column()
+  estimated_timeframe: Date;
 
-    @Field()
-    @Column()
-    estimated_timeframe: Date
+  @Field()
+  @Column()
+  time_spent: Date;
 
-    @Field()
-    @Column()
-    time_spent: Date
-    
-    @Field()
-    @Column()
-    status: number
+  @Field()
+  @Column()
+  status: number;
 
-    @ManyToOne(() => Sprint, sprint => sprint.id)
-    sprint: Sprint
+  @Field((type) => Sprint)
+  @ManyToOne(() => Sprint, (sprint) => sprint.tickets)
+  sprint: Sprint;
 
-    @ManyToOne(() => Project, project => project.id)
-    project: Project
+  @Field((type) => Project)
+  @ManyToOne(() => Project, (project) => project.tickets)
+  project: Project;
 
-    @OneToMany(() => Comment, comment => comment.ticket)
-    comments: Comment[]
-
-
-
+  @Field((type) => [Comment])
+  @OneToMany(() => Comment, (comment) => comment.ticket)
+  comments: Comment[];
 }

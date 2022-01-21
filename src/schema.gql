@@ -3,46 +3,98 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type Query {
-  getOneUser(email: String!): User!
-  getAllUsers: [User!]!
-  getAllNotificationsByUser(email: String!): [Notification!]!
-  getAllCommentsByUser(email: String!): [Comment!]!
+type Comment {
+  content: String!
+  idComment: ID!
+  ticket: Ticket!
+  user: User!
 }
 
-type User {
-  idUser: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
-  age: Int!
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Mutation {
+  addUser(
+    age: Float!
+    email: String!
+    firstName: String!
+    lastName: String!
+  ): User!
+  deleteUser(email: String!): User!
+  login(email: String!, password: String!): UserResponse!
+  register(
+    age: Float!
+    email: String!
+    firstname: String!
+    lastname: String!
+    password: String!
+  ): UserResponse!
+  updateUser(
+    age: Float!
+    email: String!
+    firstName: String!
+    lastName: String!
+  ): User!
 }
 
 type Notification {
-  idNotification: ID!
-  title: String!
-  description: String!
   date: DateTime!
+  description: String!
+  id: ID!
+  title: String!
+  user: User!
 }
 
-# The javascript `Date` as string. Type represents date and time as the ISO Date string.
-scalar DateTime
-
-type Comment {
-  idComment: ID!
-  content: String!
+type Project {
+  description: String!
+  end_date: DateTime!
+  id: ID!
+  picture: String!
+  start_date: DateTime!
+  tickets: [Ticket!]!
+  title: String!
 }
 
-type Mutation {
-  addUser(age: Float!, email: String!, lastName: String!, firstName: String!): User!
-  updateUser(age: Float!, lastName: String!, firstName: String!, email: String!): User!
-  deleteUser(email: String!): User!
-  login(password: String!, email: String!): UserResponse!
-  register(age: Float!, firstname: String!, lastname: String!, password: String!, email: String!): UserResponse!
+type Query {
+  getAllCommentsByUser(email: String!): [Comment!]!
+  getAllNotificationsByUser(email: String!): [Notification!]!
+  getAllUsers: [User!]!
+  getOneUser(email: String!): User!
+}
+
+type Sprint {
+  end_date: DateTime!
+  id: ID!
+  start_date: DateTime!
+  tickets: [Ticket!]!
+}
+
+type Ticket {
+  comments: [Comment!]!
+  description: String!
+  estimated_timeframe: DateTime!
+  idTicket: ID!
+  project: Project!
+  sprint: Sprint!
+  status: Float!
+  time_spent: DateTime!
+  title: String!
+}
+
+type User {
+  age: Int!
+  comments: [Comment!]!
+  email: String!
+  firstName: String!
+  idUser: ID!
+  lastName: String!
+  notifications: [Notification!]!
 }
 
 type UserResponse {
-  statusCode: Float!
   message: String!
+  statusCode: Float!
   token: String
 }

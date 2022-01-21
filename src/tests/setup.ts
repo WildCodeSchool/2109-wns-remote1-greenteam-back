@@ -1,5 +1,5 @@
-import initConnectDb from "../database/database";
+import initConnectDb from '../database/database';
 
 beforeAll(async () => {
-    await initConnectDb()
-})
+  await initConnectDb();
+});
