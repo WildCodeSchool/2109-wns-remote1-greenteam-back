@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, ID } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import Comment from '../entity/Comment';
 import Ticket from '../entity/Ticket';
@@ -22,7 +22,7 @@ import User from '../entity/User';
 @Resolver(Comment)
 export default class CommentResolver {
   @Query((returns) => Comment)
-  getOneComment(@Arg('id') id: number) {
+  getOneComment(@Arg('id', type => ID) id: string) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comment = commentRepository
       .createQueryBuilder('comment')

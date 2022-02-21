@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, ID } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import Sprint from '../entity/Sprint';
 import Ticket from '../entity/Ticket';
@@ -25,7 +25,7 @@ import Ticket from '../entity/Ticket';
 @Resolver(Sprint)
 export default class SprintResolver {
   @Query((returns) => Sprint)
-  getOneSprint(@Arg('id') id: number) {
+  getOneSprint(@Arg('id', type => ID) id: string) {
     const sprintRepository: Repository<Sprint> = getRepository(Sprint);
     const sprint = sprintRepository
       .createQueryBuilder('sprint')

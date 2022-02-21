@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, ID } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import Notification from '../entity/Notification';
 import User from '../entity/User';
@@ -17,7 +17,7 @@ import User from '../entity/User';
 @Resolver(Notification)
 export default class NotificationResolver {
   @Query((returns) => Notification)
-  getOneNotification(@Arg('id') id: number) {
+  getOneNotification(@Arg('id', type => ID) id: string) {
     const notificationRepository: Repository<Notification> =
       getRepository(Notification);
     const notification = notificationRepository

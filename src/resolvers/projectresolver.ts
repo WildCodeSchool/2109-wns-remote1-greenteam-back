@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, ID } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import Project from '../entity/Project';
 import Ticket from '../entity/Ticket';
@@ -24,7 +24,7 @@ import Ticket from '../entity/Ticket';
 @Resolver(Project)
 export default class ProjectResolver {
   @Query((returns) => Project)
-  getOneProject(@Arg('id') id: number) {
+  getOneProject(@Arg('id', type => ID) id: string) {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
@@ -39,10 +39,10 @@ export default class ProjectResolver {
     const projects = projectRepository
       .createQueryBuilder('project')
       .where(
-        'project.start_date IS NOT NULL' &&
-          'project.end_date IS NOT NULL' &&
-          'project.start_date<Date.now()' &&
-          'project.end_date>Date.now()'
+          'start_date<=:today', { today: new Date() }
+      )
+      .andWhere(
+        'end_date>=:today', { today: new Date() }
       )
       .getMany();
     return projects;
@@ -53,38 +53,39 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const projects = projectRepository
       .createQueryBuilder('project')
-      .where('project.end_date IS NOT NULL' && 'project.end_date<Date.now()')
-      .getMany();
-    return projects;
-  }
-
-  @Query((returns) => [Project])
-  getAllFutureprojects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
       .where(
-        'project.start_date IS NOT NULL' && 'project.start_date>Date.now()'
+        'end_date<=:today', { today: new Date() }
       )
       .getMany();
     return projects;
   }
 
   @Query((returns) => [Project])
-  getAllprojects() {
+  getAllFutureProjects() {
+    const projectRepository: Repository<Project> = getRepository(Project);
+    const projects = projectRepository
+      .createQueryBuilder('project')
+      .where(
+        'start_date>=:today', { today: new Date() }
+      )
+      .getMany();
+    return projects;
+  }
+
+  @Query((returns) => [Project])
+  getAllProjects() {
     const projectRepository: Repository<Project> = getRepository(Project);
     const projects = projectRepository.createQueryBuilder('project').getMany();
     return projects;
   }
 
   @Mutation((returns) => Project)
-  createproject(
+  createProject(
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('picture') picture: string,
     @Arg('start_date') start_date: Date,
-    @Arg('end_date') end_date: Date,
-    @Arg('tickets', (returns) => [Ticket]) tickets: Ticket[]
+    @Arg('end_date') end_date: Date
   ) {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository.create({
@@ -93,7 +94,7 @@ export default class ProjectResolver {
       picture,
       start_date,
       end_date,
-      tickets,
+      tickets: [],
     });
     return projectRepository.save(project);
   }
@@ -103,7 +104,7 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
-      .where('project.id = :id', { id })
+      .where('project.idProject = :id', { id })
       .getOne();
     projectRepository.delete(await project);
     return project;
@@ -114,21 +115,8 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const projects = projectRepository
       .createQueryBuilder('project')
-      .where('project.end_date IS NOT NULL' && 'project.end_date<Date.now()')
-      .getMany();
-    (await projects).forEach(async (project) => {
-      projectRepository.delete(project);
-    });
-    return projects;
-  }
-
-  @Mutation((returns) => [Project])
-  async deleteAllFutureprojects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
       .where(
-        'project.start_date IS NOT NULL' && 'project.start_date>Date.now()'
+        'end_date<=:today', { today: new Date() }
       )
       .getMany();
     (await projects).forEach(async (project) => {
@@ -138,15 +126,12 @@ export default class ProjectResolver {
   }
 
   @Mutation((returns) => [Project])
-  async deleteAllCurrentprojects() {
+  async deleteAllFutureProjects() {
     const projectRepository: Repository<Project> = getRepository(Project);
     const projects = projectRepository
       .createQueryBuilder('project')
       .where(
-        'project.start_date IS NOT NULL' &&
-          'project.end_date IS NOT NULL' &&
-          'project.start_date<Date.now()' &&
-          'project.end_date>Date.now()'
+        'start_date>=:today', { today: new Date() }
       )
       .getMany();
     (await projects).forEach(async (project) => {
@@ -156,7 +141,25 @@ export default class ProjectResolver {
   }
 
   @Mutation((returns) => [Project])
-  async deleteAllprojects() {
+  async deleteAllCurrentProjects() {
+    const projectRepository: Repository<Project> = getRepository(Project);
+    const projects = projectRepository
+      .createQueryBuilder('project')
+      .where(
+        'start_date<=:today', { today: new Date() }
+      )
+      .andWhere(
+        'end_date>=:today', { today: new Date() }
+      )
+      .getMany();
+    (await projects).forEach(async (project) => {
+      projectRepository.delete(project);
+    });
+    return projects;
+  }
+
+  @Mutation((returns) => [Project])
+  async deleteAllProjects() {
     const projectRepository: Repository<Project> = getRepository(Project);
     const projects = projectRepository.createQueryBuilder('project').getMany();
     (await projects).forEach(async (project) => {
@@ -167,7 +170,7 @@ export default class ProjectResolver {
 
   @Mutation((returns) => Project)
   async updateproject(
-    @Arg('id') id: number,
+    @Arg('id', type => ID) id: string,
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('picture') picture: string,
@@ -178,7 +181,7 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
-      .where('project.id = :id', { id })
+      .where('project.idProject = :id', { id })
       .getOne();
     (await project).title = title;
     (await project).description = description;

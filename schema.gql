@@ -24,46 +24,47 @@ scalar DateTime
 
 type Mutation {
   addRoleToUserByProject(project: [ProjectInput!]!, role: [UserRole!]!, user: [UserInput!]!): User!
-  addUser(age: Float!, email: String!, firstName: String!, lastName: String!): User!
   addUserToProject(project: [ProjectInput!]!, role: [UserRole!]!, user: [UserInput!]!): User!
   createComment(content: String!, ticket: [TicketInput!]!, user: [UserInput!]!): Comment!
   createNotification(description: String!, title: String!, user: [UserInput!]!): Notification!
-  createproject(description: String!, end_date: DateTime!, picture: String!, start_date: DateTime!, tickets: [TicketInput!]!, title: String!): Project!
+  createProject(description: String!, end_date: DateTime!, picture: String!, start_date: DateTime!, title: String!): Project!
   createSprint(end_date: DateTime!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
   createTicket(description: String!, estimated_timeframe: DateTime!, project: [ProjectInput!]!, sprint: [SprintInput!]!, status: Float!, time_spent: DateTime!, title: String!): Ticket!
   deleteAllCommentsByTicket(ticket: [TicketInput!]!): [Comment!]!
   deleteAllCommentsByUser(user: [UserInput!]!): [Comment!]!
-  deleteAllCurrentprojects: [Project!]!
+  deleteAllCurrentProjects: [Project!]!
   deleteAllCurrentSprints: Sprint!
-  deleteAllFutureprojects: [Project!]!
+  deleteAllFutureProjects: [Project!]!
   deleteAllFutureSprints: Sprint!
   deleteAllPastProjects: [Project!]!
   deleteAllPastSprints: Sprint!
-  deleteAllprojects: [Project!]!
+  deleteAllProjects: [Project!]!
   deleteAllSprints: Sprint!
+  deleteAllTicketsByProject(project: [ProjectInput!]!): Boolean!
+  deleteAllTicketsBySprint(sprint: [SprintInput!]!): Boolean!
   deleteComment(id: Float!): Comment!
   deleteNotification(id: Float!, user: [UserInput!]!): Notification!
   deleteProject(id: Float!): Project!
   deleteRoleOfUserByProject(project: [ProjectInput!]!, user: [UserInput!]!): User!
   deleteSprint(id: Float!): Sprint!
-  deleteTicket(id: Float!): Ticket!
-  deleteUser(email: String!): User!
+  deleteTicket(idTicket: Float!): Ticket!
+  deleteUser(idUser: ID!): User!
   login(email: String!, password: String!): UserResponse!
   register(age: Float!, email: String!, firstname: String!, lastname: String!, password: String!): UserResponse!
   removeUserFromProject(project: [ProjectInput!]!, user: [UserInput!]!): User!
   updateComment(content: String!, idComment: Float!): Comment!
   updateNotification(description: String!, id: Float!, title: String!, user: [UserInput!]!): Notification!
-  updateproject(description: String!, end_date: DateTime!, id: Float!, picture: String!, start_date: DateTime!, tickets: [TicketInput!]!, title: String!): Project!
   updateRoleOfUserByProject(project: [ProjectInput!]!, role: [UserRole!]!, user: [UserInput!]!): User!
   updateSprint(end_date: DateTime!, id: Float!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
-  updateTicket(description: String!, id: Float!, project: [ProjectInput!]!, sprint: [SprintInput!]!, status: Float!, title: String!): Ticket!
-  updateUser(age: Float!, email: String!, firstName: String!, lastName: String!): User!
+  updateTicket(description: String!, idTicket: Float!, project: [ProjectInput!]!, sprint: [SprintInput!]!, status: Float!, title: String!): Ticket!
+  updateUser(age: Float!, email: String!, firstname: String!, lastname: String!, password: String!): User!
+  updateproject(description: String!, end_date: DateTime!, id: ID!, picture: String!, start_date: DateTime!, tickets: [TicketInput!]!, title: String!): Project!
 }
 
 type Notification {
   date: DateTime!
   description: String!
-  id: ID!
+  idNotification: ID!
   title: String!
   user: User!
 }
@@ -71,7 +72,7 @@ type Notification {
 input NotificationInput {
   date: DateTime!
   description: String!
-  id: ID!
+  idNotification: ID!
   title: String!
   user: UserInput!
 }
@@ -79,7 +80,7 @@ input NotificationInput {
 type Project {
   description: String!
   end_date: DateTime!
-  id: ID!
+  idProject: ID!
   picture: String!
   start_date: DateTime!
   tickets: [Ticket!]!
@@ -89,7 +90,7 @@ type Project {
 input ProjectInput {
   description: String!
   end_date: DateTime!
-  id: ID!
+  idProject: ID!
   picture: String!
   start_date: DateTime!
   tickets: [TicketInput!]!
@@ -102,12 +103,12 @@ type Query {
   getAllCommentsByUserAndTicket(ticket: [TicketInput!]!, user: [UserInput!]!): [Comment!]!
   getAllCurrentProjects: [Project!]!
   getAllCurrentSprints: [Sprint!]!
-  getAllFutureprojects: [Project!]!
+  getAllFutureProjects: [Project!]!
   getAllFutureSprints: [Sprint!]!
   getAllNotificationsByUser(user: [UserInput!]!): [Notification!]!
   getAllPastProjects: [Project!]!
   getAllPastSprints: [Sprint!]!
-  getAllprojects: [Project!]!
+  getAllProjects: [Project!]!
   getAllProjectsByUser(user: [UserInput!]!): [User!]!
   getAllProjectsByUserAndRole(role: [UserRole!]!, user: [UserInput!]!): [User!]!
   getAllRolesByUser(user: [UserInput!]!): [User!]!
@@ -120,23 +121,24 @@ type Query {
   getAllUsersByProject(project: [ProjectInput!]!): [User!]!
   getAllUsersByProjectAndRole(project: [ProjectInput!]!, role: [UserRole!]!): [User!]!
   getAllUsersByRole(role: [UserRole!]!): [User!]!
-  getOneComment(id: Float!): Comment!
-  getOneNotification(id: Float!): Notification!
-  getOneProject(id: Float!): Ticket!
-  getOneSprint(id: Float!): Sprint!
+  getOneComment(id: ID!): Comment!
+  getOneNotification(id: ID!): Notification!
+  getOneProject(id: ID!): Project!
+  getOneSprint(id: ID!): Sprint!
+  getOneTicket(idTicket: Float!): Ticket!
   getOneUser(email: String!): User!
 }
 
 type Sprint {
   end_date: DateTime!
-  id: ID!
+  idSprint: ID!
   start_date: DateTime!
   tickets: [Ticket!]!
 }
 
 input SprintInput {
   end_date: DateTime!
-  id: ID!
+  idSprint: ID!
   start_date: DateTime!
   tickets: [TicketInput!]!
 }

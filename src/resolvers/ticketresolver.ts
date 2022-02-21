@@ -16,16 +16,18 @@ import Ticket from '../entity/Ticket';
 => Create a ticket
 => Delete a ticket
 => Update a ticket
+=> Delete all tickets by sprint
+=> Delete all tickets by project
 */
 
 @Resolver(Ticket)
 export default class TicketResolver {
   @Query((returns) => Ticket)
-  getOneProject(@Arg('id') id: number) {
+  getOneTicket(@Arg('idTicket') idTicket: number) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.idTicket = :id', { id })
+      .where('ticket.idTicket = :idTicket', { idTicket })
       .getOne();
     return ticket;
   }
@@ -93,18 +95,18 @@ export default class TicketResolver {
   }
 
   @Mutation((returns) => Ticket)
-  async deleteTicket(@Arg('id') id: number) {
+  async deleteTicket(@Arg('idTicket') idTicket: number) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.id = :id', { id })
+      .where('ticket.idTicket = :idTicket', { idTicket })
       .getOne();
     return ticketRepository.remove(await ticket);
   }
 
   @Mutation((returns) => Ticket)
   async updateTicket(
-    @Arg('id') id: number,
+    @Arg('idTicket') idTicket: number,
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('status') status: number,
@@ -114,7 +116,7 @@ export default class TicketResolver {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.id = :id', { id })
+      .where('ticket.idTicket = :idTicket', { idTicket })
       .getOne();
     (await ticket).title = title;
     (await ticket).description = description;
@@ -122,5 +124,27 @@ export default class TicketResolver {
     (await ticket).sprint = sprint;
     (await ticket).project = project;
     return ticketRepository.save(await ticket);
+  }
+
+  @Mutation((returns) => Boolean)
+  async deleteAllTicketsBySprint(@Arg('sprint', (returns) => [Sprint]) sprint: Sprint) {
+    const ticketRepository: Repository<Ticket> = getRepository(Ticket);
+    const tickets = ticketRepository
+      .createQueryBuilder('ticket')
+      .where('ticket.sprint = :sprint', { sprint })
+      .getMany();
+    return ticketRepository.remove(await tickets);
+  }
+
+  @Mutation((returns) => Boolean)
+  async deleteAllTicketsByProject(
+    @Arg('project', (returns) => [Project]) project: Project
+  ) {
+    const ticketRepository: Repository<Ticket> = getRepository(Ticket);
+    const tickets = ticketRepository
+      .createQueryBuilder('ticket')
+      .where('ticket.project = :project', { project })
+      .getMany();
+    return ticketRepository.remove(await tickets);
   }
 }

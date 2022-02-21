@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, ID } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import Comment from '../entity/Comment';
 import Notification from '../entity/Notification';
@@ -58,50 +58,33 @@ export default class UserResolver {
   }
 
   @Mutation((returns) => User)
-  async addUser(
-    @Arg('firstName') firstName: string,
-    @Arg('lastName') lastName: string,
-    @Arg('email') email: string,
-    @Arg('age') age: number
-  ) {
-    const userRepository: Repository<User> = getRepository(User);
-    const user = userRepository.create({
-      firstName,
-      lastName,
-      email,
-      age,
-    });
-    await userRepository.save(user);
-    return user;
-  }
-
-  @Mutation((returns) => User)
   async updateUser(
     @Arg('email') email: string,
-    @Arg('firstName') firstName: string,
-    @Arg('lastName') lastName: string,
-    @Arg('age') age: number
+    @Arg('firstname') firstname: string,
+    @Arg('lastname') lastname: string,
+    @Arg('age') age: number,
+    @Arg('password') password: string,
   ) {
     const userRepository: Repository<User> = getRepository(User);
     const user = userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', { email })
       .getOne();
-    (await user).firstName = firstName;
-    (await user).lastName = lastName;
+    (await user).firstName = firstname;
+    (await user).lastName = lastname;
     (await user).age = age;
+    (await user).password = password;
     await userRepository.save(await user);
     return user;
   }
 
   @Mutation((returns) => User)
-  async deleteUser(@Arg('email') email: string) {
-    const userRepository: Repository<User> = getRepository(User);
-    const user = userRepository
-      .createQueryBuilder('user')
-      .where('user.email = :email', { email })
-      .getOne();
-    await userRepository.remove(await user);
-    return user;
+  async deleteUser(@Arg('idUser', type => ID) idUser: number) {
+    const repository = getRepository(User);
+    const user = await repository.findOne({ idUser });
+    await repository.delete({ idUser });
+    return {
+        ...user,
+    };
   }
 }

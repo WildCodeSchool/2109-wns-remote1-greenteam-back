@@ -10,7 +10,7 @@ import User from './User';
 export default class Notification {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  id: string;
+  idNotification: string;
 
   @Field()
   @Column()

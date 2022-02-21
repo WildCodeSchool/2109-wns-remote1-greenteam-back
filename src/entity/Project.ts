@@ -10,7 +10,7 @@ import Ticket from './Ticket';
 export default class Project {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  idProject: number;
 
   @Field()
   @Column()

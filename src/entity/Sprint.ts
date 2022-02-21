@@ -10,7 +10,7 @@ import Ticket from './Ticket';
 export default class Sprint {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  id: string;
+  idSprint: string;
 
   @Field()
   @Column()

@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType, Int, InputType } from 'type-graphql';
 import * as jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+import { Length } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import Comment from './Comment';
 import Notification from './Notification';
@@ -22,6 +23,7 @@ export default class User {
   lastName: string;
 
   @Field()
+  @Length(4, 100)
   @Column()
   email: string;
 
