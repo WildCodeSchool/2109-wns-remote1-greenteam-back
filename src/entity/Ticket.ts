@@ -18,7 +18,7 @@ import Comment from './Comment';
 export default class Ticket {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  idTicket: number;
+  id: number;
 
   @Field()
   @Column()
@@ -34,7 +34,7 @@ export default class Ticket {
 
   @Field()
   @Column()
-  time_spent: Date;
+  time_spent: number;
 
   @Field()
   @Column()
@@ -49,6 +49,8 @@ export default class Ticket {
   project: Project;
 
   @Field((type) => [Comment])
-  @OneToMany(() => Comment, (comment) => comment.ticket)
+  @OneToMany(() => Comment, (comment) => comment.ticket, {
+    cascade: true,
+})
   comments: Comment[];
 }

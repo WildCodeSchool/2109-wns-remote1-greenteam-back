@@ -12,7 +12,7 @@ import Notification from './Notification';
 export default class User {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  idUser: number;
+  id: number;
 
   @Field()
   @Column()
@@ -35,11 +35,15 @@ export default class User {
   password: string;
 
   @Field((type) => [Notification])
-  @OneToMany(() => Notification, (notification) => notification.user)
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+})
   notifications: Notification[];
 
   @Field((type) => [Comment])
-  @OneToMany(() => Comment, (comment) => comment.user)
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    cascade: true,
+})
   comments: Comment[];
 
   async encryptPassword(password: string) {
@@ -52,7 +56,7 @@ export default class User {
 
   generateToken() {
     const payload = {
-      id: this.idUser,
+      id: this.id,
       email: this.email,
       lastName: this.lastName,
       firstName: this.firstName,

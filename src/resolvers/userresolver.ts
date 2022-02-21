@@ -79,10 +79,10 @@ export default class UserResolver {
   }
 
   @Mutation((returns) => User)
-  async deleteUser(@Arg('idUser', type => ID) idUser: number) {
+  async deleteUser(@Arg('id', type => ID) id: number) {
     const repository = getRepository(User);
-    const user = await repository.findOne({ idUser });
-    await repository.delete({ idUser });
+    const user = await repository.findOne({ id });
+    await repository.delete({ id });
     return {
         ...user,
     };

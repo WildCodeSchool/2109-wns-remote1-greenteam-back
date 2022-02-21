@@ -28,7 +28,7 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
-      .where('project.idProject = :id', { id })
+      .where('project.id = :id', { id })
       .getOne();
     return project;
   }
@@ -104,7 +104,7 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
-      .where('project.idProject = :id', { id })
+      .where('project.id = :id', { id })
       .getOne();
     projectRepository.delete(await project);
     return project;
@@ -181,7 +181,7 @@ export default class ProjectResolver {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
-      .where('project.idProject = :id', { id })
+      .where('project.id = :id', { id })
       .getOne();
     (await project).title = title;
     (await project).description = description;

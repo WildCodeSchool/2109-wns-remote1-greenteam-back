@@ -22,7 +22,7 @@ export default class NotificationResolver {
       getRepository(Notification);
     const notification = notificationRepository
       .createQueryBuilder('notification')
-      .where('notification.idNotification = :id', { id })
+      .where('notification.id = :id', { id })
       .getOne();
     return notification;
   }

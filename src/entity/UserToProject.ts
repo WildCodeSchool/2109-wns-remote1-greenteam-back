@@ -22,10 +22,10 @@ registerEnumType(UserRole, {
 export default class UserToProject {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  idUserToProject: number;
+  id: number;
 
   @Field((type) => User)
-  @ManyToOne(() => User, (user) => user.idUser)
+  @ManyToOne(() => User, (user) => user.id)
   user: User;
 
   @Field((type) => Project)

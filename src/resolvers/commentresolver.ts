@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Arg, Mutation, ID } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import Comment from '../entity/Comment';
 import Ticket from '../entity/Ticket';
@@ -22,11 +22,11 @@ import User from '../entity/User';
 @Resolver(Comment)
 export default class CommentResolver {
   @Query((returns) => Comment)
-  getOneComment(@Arg('id', type => ID) id: string) {
+  getOneComment(@Arg('id') id: number) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comment = commentRepository
       .createQueryBuilder('comment')
-      .where('comment.idComment = :id', { id })
+      .where('comment.id = :id', { id })
       .getOne();
     return comment;
   }
@@ -59,7 +59,7 @@ export default class CommentResolver {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository
       .createQueryBuilder('comment')
-      .groupBy('comment.idComment')
+      .groupBy('comment.id')
       .where('comment.user = :user', { user })
       .andWhere('comment.ticket = :ticket', { ticket })
       .getMany();
@@ -120,12 +120,16 @@ export default class CommentResolver {
   }
 
   @Mutation((returns) => Comment)
-  updateComment(
-    @Arg('idComment') idComment: number,
+  async updateComment(
+    @Arg('id') id: number,
     @Arg('content') content: string
   ) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
-    const comment = commentRepository.update({ idComment }, { content });
+    const comment = commentRepository
+      .createQueryBuilder('comment')
+      .where('comment.id = :id', { id })
+      .getOne();
+    (await comment).content = content;
     return comment;
   }
 }

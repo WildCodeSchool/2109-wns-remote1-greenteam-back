@@ -15,7 +15,7 @@ import User from './User';
 export default class Comment {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  idComment: number;
+  id: number;
 
   @Field((type) => User)
   @ManyToOne(() => User, (user) => user.comments)

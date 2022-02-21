@@ -10,7 +10,7 @@ import Ticket from './Ticket';
 export default class Sprint {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  idSprint: string;
+  id: number;
 
   @Field()
   @Column()
@@ -21,6 +21,8 @@ export default class Sprint {
   end_date: Date;
 
   @Field((type) => [Ticket])
-  @OneToMany(() => Ticket, (ticket) => ticket.sprint)
+  @OneToMany(() => Ticket, (ticket) => ticket.sprint, {
+    cascade: true,
+})
   tickets: Ticket[];
 }

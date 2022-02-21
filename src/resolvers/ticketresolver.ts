@@ -23,11 +23,11 @@ import Ticket from '../entity/Ticket';
 @Resolver(Ticket)
 export default class TicketResolver {
   @Query((returns) => Ticket)
-  getOneTicket(@Arg('idTicket') idTicket: number) {
+  getOneTicket(@Arg('id') id: number) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.idTicket = :idTicket', { idTicket })
+      .where('ticket.id = :id', { id })
       .getOne();
     return ticket;
   }
@@ -76,9 +76,7 @@ export default class TicketResolver {
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('estimated_timeframe') estimated_timeframe: Date,
-    @Arg('time_spent') time_spent: Date,
     @Arg('status') status: number,
-    @Arg('sprint', (returns) => [Sprint]) sprint: Sprint,
     @Arg('project', (returns) => [Project]) project: Project
   ) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
@@ -86,27 +84,28 @@ export default class TicketResolver {
       title,
       description,
       estimated_timeframe,
-      time_spent,
+      time_spent: 0,
       status,
-      sprint,
       project,
+      comments: [],
+      sprint: null,
     });
     return ticketRepository.save(ticket);
   }
 
   @Mutation((returns) => Ticket)
-  async deleteTicket(@Arg('idTicket') idTicket: number) {
+  async deleteTicket(@Arg('id') id: number) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.idTicket = :idTicket', { idTicket })
+      .where('ticket.id = :id', { id })
       .getOne();
     return ticketRepository.remove(await ticket);
   }
 
   @Mutation((returns) => Ticket)
   async updateTicket(
-    @Arg('idTicket') idTicket: number,
+    @Arg('id') id: number,
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('status') status: number,
@@ -116,7 +115,7 @@ export default class TicketResolver {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.idTicket = :idTicket', { idTicket })
+      .where('ticket.id = :id', { id })
       .getOne();
     (await ticket).title = title;
     (await ticket).description = description;

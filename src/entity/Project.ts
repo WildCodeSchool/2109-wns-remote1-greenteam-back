@@ -10,7 +10,7 @@ import Ticket from './Ticket';
 export default class Project {
   @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  idProject: number;
+  id: number;
 
   @Field()
   @Column()
@@ -33,6 +33,8 @@ export default class Project {
   end_date: Date;
 
   @Field((type) => [Ticket])
-  @OneToMany(() => Ticket, (ticket) => ticket.project)
+  @OneToMany(() => Ticket, (ticket) => ticket.project, {
+    cascade: true,
+})
   tickets: Ticket[];
 }
