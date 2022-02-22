@@ -32,7 +32,7 @@ export default class CommentResolver {
   }
 
   @Query((returns) => [Comment])
-  getAllCommentsByUser(@Arg('user', (returns) => [User]) user: User) {
+  getAllCommentsByUser(@Arg('user', (returns) => User) user: User) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository
       .createQueryBuilder('comment')
@@ -42,7 +42,7 @@ export default class CommentResolver {
   }
 
   @Query((returns) => [Comment])
-  getAllCommentsByTicket(@Arg('ticket', (returns) => [Ticket]) ticket: number) {
+  getAllCommentsByTicket(@Arg('ticket', (returns) => Ticket) ticket: number) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository
       .createQueryBuilder('comment')
@@ -53,8 +53,8 @@ export default class CommentResolver {
 
   @Query((returns) => [Comment])
   getAllCommentsByUserAndTicket(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('ticket', (returns) => [Ticket]) ticket: number
+    @Arg('user', (returns) => User) user: User,
+    @Arg('ticket', (returns) => Ticket) ticket: number
   ) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository
@@ -68,8 +68,8 @@ export default class CommentResolver {
 
   @Mutation((returns) => Comment)
   createComment(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('ticket', (returns) => [Ticket]) ticket: Ticket,
+    @Arg('user', (returns) => User) user: User,
+    @Arg('ticket', (returns) => Ticket) ticket: Ticket,
     @Arg('content') content: string
   ) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
@@ -92,7 +92,7 @@ export default class CommentResolver {
   }
 
   @Mutation((returns) => [Comment])
-  async deleteAllCommentsByUser(@Arg('user', (returns) => [User]) user: User) {
+  async deleteAllCommentsByUser(@Arg('user', (returns) => User) user: User) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository
       .createQueryBuilder('comment')
@@ -106,7 +106,7 @@ export default class CommentResolver {
 
   @Mutation((returns) => [Comment])
   async deleteAllCommentsByTicket(
-    @Arg('ticket', (returns) => [Ticket]) ticket: Ticket
+    @Arg('ticket', (returns) => Ticket) ticket: Ticket
   ) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository

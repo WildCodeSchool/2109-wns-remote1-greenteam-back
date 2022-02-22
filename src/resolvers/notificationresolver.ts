@@ -28,7 +28,7 @@ export default class NotificationResolver {
   }
 
   @Query((returns) => [Notification])
-  getAllNotificationsByUser(@Arg('user', (returns) => [User]) user: User) {
+  getAllNotificationsByUser(@Arg('user', (returns) => User) user: User) {
     const notificationRepository: Repository<Notification> =
       getRepository(Notification);
     const notifications = notificationRepository
@@ -40,7 +40,7 @@ export default class NotificationResolver {
 
   @Mutation((returns) => Notification)
   createNotification(
-    @Arg('user', (returns) => [User]) user: User,
+    @Arg('user', (returns) => User) user: User,
     @Arg('title') title: string,
     @Arg('description') description: string
   ) {
@@ -56,7 +56,7 @@ export default class NotificationResolver {
 
   @Mutation((returns) => Notification)
   async deleteNotification(
-    @Arg('user', (returns) => [User]) user: User,
+    @Arg('user', (returns) => User) user: User,
     @Arg('id') id: number
   ) {
     const notificationRepository: Repository<Notification> =
@@ -71,7 +71,7 @@ export default class NotificationResolver {
   @Mutation((returns) => Notification)
   updateNotification(
     @Arg('id') id: number,
-    @Arg('user', (returns) => [User]) user: User,
+    @Arg('user', (returns) => User) user: User,
     @Arg('title') title: string,
     @Arg('description') description: string
   ) {

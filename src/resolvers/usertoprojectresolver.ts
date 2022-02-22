@@ -24,7 +24,7 @@ import UserToProject, { UserRole } from '../entity/UserToProject';
 @Resolver(UserToProject)
 export default class UserToProjectResolver {
   @Query((returns) => [User])
-  getAllUsersByRole(@Arg('role', (returns) => [UserRole]) role: UserRole) {
+  getAllUsersByRole(@Arg('role', (returns) => UserRole) role: UserRole) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
     const users = usertoprojectRepository
@@ -36,7 +36,7 @@ export default class UserToProjectResolver {
 
   @Query((returns) => [User])
   getAllUsersByProject(
-    @Arg('project', (returns) => [Project]) project: Project
+    @Arg('project', (returns) => Project) project: Project
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -49,8 +49,8 @@ export default class UserToProjectResolver {
 
   @Query((returns) => [User])
   getAllUsersByProjectAndRole(
-    @Arg('project', (returns) => [Project]) project: Project,
-    @Arg('role', (returns) => [UserRole]) role: UserRole
+    @Arg('project', (returns) => Project) project: Project,
+    @Arg('role', (returns) => UserRole) role: UserRole
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -63,7 +63,7 @@ export default class UserToProjectResolver {
   }
 
   @Query((returns) => [User])
-  getAllProjectsByUser(@Arg('user', (returns) => [User]) user: User) {
+  getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
     const projects = usertoprojectRepository
@@ -74,7 +74,7 @@ export default class UserToProjectResolver {
   }
 
   @Query((returns) => [User])
-  getAllRolesByUser(@Arg('user', (returns) => [User]) user: User) {
+  getAllRolesByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
     const roles = usertoprojectRepository
@@ -86,8 +86,8 @@ export default class UserToProjectResolver {
 
   @Query((returns) => [User])
   getAllProjectsByUserAndRole(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('role', (returns) => [UserRole]) role: UserRole
+    @Arg('user', (returns) => User) user: User,
+    @Arg('role', (returns) => UserRole) role: UserRole
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -101,9 +101,9 @@ export default class UserToProjectResolver {
 
   @Mutation((returns) => User)
   addUserToProject(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('project', (returns) => [Project]) project: Project,
-    @Arg('role', (returns) => [UserRole]) role: UserRole
+    @Arg('user', (returns) => User) user: User,
+    @Arg('project', (returns) => Project) project: Project,
+    @Arg('role', (returns) => UserRole) role: UserRole
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -118,8 +118,8 @@ export default class UserToProjectResolver {
 
   @Mutation((returns) => User)
   async removeUserFromProject(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('project', (returns) => [Project]) project: Project
+    @Arg('user', (returns) => User) user: User,
+    @Arg('project', (returns) => Project) project: Project
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -134,9 +134,9 @@ export default class UserToProjectResolver {
 
   @Mutation((returns) => User)
   async addRoleToUserByProject(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('project', (returns) => [Project]) project: Project,
-    @Arg('role', (returns) => [UserRole]) role: UserRole
+    @Arg('user', (returns) => User) user: User,
+    @Arg('project', (returns) => Project) project: Project,
+    @Arg('role', (returns) => UserRole) role: UserRole
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -152,9 +152,9 @@ export default class UserToProjectResolver {
 
   @Mutation((returns) => User)
   async updateRoleOfUserByProject(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('project', (returns) => [Project]) project: Project,
-    @Arg('role', (returns) => [UserRole]) role: UserRole
+    @Arg('user', (returns) => User) user: User,
+    @Arg('project', (returns) => Project) project: Project,
+    @Arg('role', (returns) => UserRole) role: UserRole
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -170,8 +170,8 @@ export default class UserToProjectResolver {
 
   @Mutation((returns) => User)
   async deleteRoleOfUserByProject(
-    @Arg('user', (returns) => [User]) user: User,
-    @Arg('project', (returns) => [Project]) project: Project
+    @Arg('user', (returns) => User) user: User,
+    @Arg('project', (returns) => Project) project: Project
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);

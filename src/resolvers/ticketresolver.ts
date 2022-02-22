@@ -33,7 +33,7 @@ export default class TicketResolver {
   }
 
   @Query((returns) => [Ticket])
-  getAllTicketsBySprint(@Arg('sprint', (returns) => [Sprint]) sprint: Sprint) {
+  getAllTicketsBySprint(@Arg('sprint', (returns) => Sprint) sprint: Sprint) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const tickets = ticketRepository
       .createQueryBuilder('ticket')
@@ -44,7 +44,7 @@ export default class TicketResolver {
 
   @Query((returns) => [Ticket])
   getAllTicketsByProject(
-    @Arg('project', (returns) => [Project]) project: Project
+    @Arg('project', (returns) => Project) project: Project
   ) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const tickets = ticketRepository
@@ -67,7 +67,7 @@ export default class TicketResolver {
   @Query((returns) => [Ticket])
   getAllTickets() {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
-    const tickets = ticketRepository.createQueryBuilder('ticket').getMany();
+    const tickets = ticketRepository.find({ relations: ["project"]});
     return tickets;
   }
 
@@ -77,7 +77,7 @@ export default class TicketResolver {
     @Arg('description') description: string,
     @Arg('estimated_timeframe') estimated_timeframe: Date,
     @Arg('status') status: number,
-    @Arg('project', (returns) => [Project]) project: Project
+    @Arg('project', (returns) => Project) project: Project
   ) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository.create({
@@ -109,8 +109,9 @@ export default class TicketResolver {
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('status') status: number,
-    @Arg('sprint', (returns) => [Sprint]) sprint: Sprint,
-    @Arg('project', (returns) => [Project]) project: Project
+    @Arg('estimated_timeframe') estimated_timeframe: Date,
+    @Arg('sprint', (returns) => Sprint) sprint: Sprint,
+    @Arg('project', (returns) => Project) project: Project
   ) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const ticket = ticketRepository

@@ -15,9 +15,8 @@ async function bootstrap() {
   // @ts-ignore
   const server = new ApolloServer({
     schema,
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     cors: {
-      origin: ['*'],
+      origin: '*',
     },
     context: {
       bdd: connectBdd,
