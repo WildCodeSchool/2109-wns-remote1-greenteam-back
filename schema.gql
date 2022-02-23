@@ -48,7 +48,6 @@ type Mutation {
   register(email: String!, firstname: String!, lastname: String!, password: String!): UserResponse!
   removeUserFromProject(project: ProjectInput!, user: UserInput!): UserToProject!
   updateComment(content: String!, id: Float!, user: UserInput!): Comment!
-  updateNotification(description: String!, id: Float!, title: String!, user: UserInput!): Notification!
   updateRoleOfUserByProject(project: ProjectInput!, role: UserRole!, user: UserInput!): UserToProject!
   updateSprint(end_date: DateTime!, id: Float!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
   updateTicket(description: String!, estimated_timeframe: DateTime!, id: Float!, project: ProjectInput!, sprint: SprintInput!, status: Float!, title: String!): Ticket!
@@ -112,7 +111,6 @@ type Query {
   getAllUsersByProjectAndRole(project: ProjectInput!, role: UserRole!): [User!]!
   getAllUsersByRole(role: UserRole!): [User!]!
   getOneComment(id: Float!): Comment!
-  getOneNotification(id: ID!): Notification!
   getOneProject(id: ID!): Project!
   getOneSprint(id: ID!): Sprint!
   getOneTicket(id: Float!): Ticket!
