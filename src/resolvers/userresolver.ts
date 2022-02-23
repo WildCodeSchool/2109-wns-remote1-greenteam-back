@@ -72,7 +72,6 @@ export default class UserResolver {
       .getOne();
     (await user).firstName = firstname;
     (await user).lastName = lastname;
-    (await user).age = age;
     (await user).password = password;
     await userRepository.save(await user);
     return user;

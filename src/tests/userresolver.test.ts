@@ -9,7 +9,6 @@ describe('le resolver user', () => {
     usertoreceive.firstName = 'Valère';
     usertoreceive.lastName = 'Preney';
     usertoreceive.email = 'valerepreney@hotmail.fr';
-    usertoreceive.age = 27;
     usertoreceive.password = '';
     expect(await userresolver.getOneUser('valerepreney@hotmail.fr')).toEqual(
       usertoreceive

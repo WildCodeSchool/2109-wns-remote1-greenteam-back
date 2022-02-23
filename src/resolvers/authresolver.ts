@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import { Resolver, Mutation, Arg } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import User from '../entity/User';
@@ -16,7 +19,7 @@ export default class AuthResolver {
     const userRepository: Repository<User> = getRepository(User);
     const userToFind = await userRepository
       .createQueryBuilder('user')
-      .where('user.email = :email', { email: email })
+      .where('user.email = :email', { email })
       .getOne();
 
     if (!userToFind)
@@ -37,7 +40,7 @@ export default class AuthResolver {
     return {
       statusCode: 201,
       message: 'Connection réussie',
-      token: token,
+      token,
     };
   }
 
@@ -55,13 +58,12 @@ export default class AuthResolver {
     const userRepository: Repository<User> = getRepository(User);
     const userToFind = await userRepository
       .createQueryBuilder('user')
-      .where('user.email = :email', { email: email })
+      .where('user.email = :email', { email })
       .getOne();
     if (userToFind) throw new Error('Cet email est déjà utilisée.');
 
     try {
       const user = new User();
-      user.age = age;
       user.firstName = firstname;
       user.lastName = lastname;
       user.email = email;
@@ -75,7 +77,7 @@ export default class AuthResolver {
       return {
         statusCode: 201,
         message: 'Merci pour votre inscription',
-        token: token,
+        token,
       };
     } catch (e) {
       return e;

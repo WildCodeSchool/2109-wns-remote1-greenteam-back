@@ -27,10 +27,6 @@ export default class User {
   @Column()
   email: string;
 
-  @Field((type) => Int)
-  @Column()
-  age: number;
-
   @Column()
   password: string;
 
