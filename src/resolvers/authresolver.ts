@@ -48,7 +48,7 @@ export default class AuthResolver {
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Arg('lastname') lastname: string,
-    @Arg('firstname') firstname: String
+    @Arg('firstname') firstname: string
   ) {
     if (!email || !password || !lastname || !firstname)
       throw new Error('Veuillez remplir correctement le formulaire');
