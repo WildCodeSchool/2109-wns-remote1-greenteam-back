@@ -9,13 +9,10 @@ import User from '../entity/User';
 
 /*
 => Get a comment by id
-=> Get all comments by user
 => Get all comments by ticket
-=> Get all comments by user and ticket
 => Create a comment
 => Delete a comment
 => Delete all comments by user
-=> Delete all comments by ticket
 => Update a comment
 */
 
@@ -32,36 +29,11 @@ export default class CommentResolver {
   }
 
   @Query((returns) => [Comment])
-  getAllCommentsByUser(@Arg('user', (returns) => User) user: User) {
-    const commentRepository: Repository<Comment> = getRepository(Comment);
-    const comments = commentRepository
-      .createQueryBuilder('comment')
-      .where('comment.user = :user', { user })
-      .getMany();
-    return comments;
-  }
-
-  @Query((returns) => [Comment])
   getAllCommentsByTicket(@Arg('ticket', (returns) => Ticket) ticket: number) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comments = commentRepository
       .createQueryBuilder('comment')
       .where('comment.ticket = :ticket', { ticket })
-      .getMany();
-    return comments;
-  }
-
-  @Query((returns) => [Comment])
-  getAllCommentsByUserAndTicket(
-    @Arg('user', (returns) => User) user: User,
-    @Arg('ticket', (returns) => Ticket) ticket: number
-  ) {
-    const commentRepository: Repository<Comment> = getRepository(Comment);
-    const comments = commentRepository
-      .createQueryBuilder('comment')
-      .groupBy('comment.id')
-      .where('comment.user = :user', { user })
-      .andWhere('comment.ticket = :ticket', { ticket })
       .getMany();
     return comments;
   }
@@ -104,25 +76,11 @@ export default class CommentResolver {
     return comments;
   }
 
-  @Mutation((returns) => [Comment])
-  async deleteAllCommentsByTicket(
-    @Arg('ticket', (returns) => Ticket) ticket: Ticket
-  ) {
-    const commentRepository: Repository<Comment> = getRepository(Comment);
-    const comments = commentRepository
-      .createQueryBuilder('comment')
-      .where('comment.ticket = :ticket', { ticket })
-      .getMany();
-    (await comments).forEach(async (comment) => {
-      await commentRepository.remove(comment);
-    });
-    return comments;
-  }
-
   @Mutation((returns) => Comment)
   async updateComment(
     @Arg('id') id: number,
-    @Arg('content') content: string
+    @Arg('content') content: string,
+    @Arg('user', (returns) => User) user: User
   ) {
     const commentRepository: Repository<Comment> = getRepository(Comment);
     const comment = commentRepository
