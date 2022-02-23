@@ -1,25 +1,28 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
-import {ObjectType, Field, ID} from 'type-graphql'
-import Ticket from "./Ticket";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { ObjectType, Field, ID, InputType } from 'type-graphql';
+import Ticket from './Ticket';
 
 @ObjectType()
+@InputType('SprintInput')
 @Entity()
 export default class Sprint {
+  @Field((type) => ID)
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Field(type => ID)
-    @PrimaryGeneratedColumn()
-    id: string
+  @Field()
+  @Column()
+  start_date: Date;
 
-    @Field()
-    @Column()
-    start_date: Date
+  @Field()
+  @Column()
+  end_date: Date;
 
-    @Field()
-    @Column()
-    end_date: Date
-
-    @OneToMany(() => Ticket, ticket => ticket.sprint)
-    tickets : Ticket[]
+  @Field((type) => [Ticket])
+  @OneToMany(() => Ticket, (ticket) => ticket.sprint, {
+    cascade: true,
+})
+  tickets: Ticket[];
 }

@@ -1,16 +1,13 @@
-import {Field, ObjectType} from "type-graphql";
-
-
+import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType()
 export default class UserResponse {
-
-  @Field(type => Number)
+  @Field((type) => Number)
   statusCode: number;
 
   @Field()
-  message: string
+  message: string;
 
-  @Field(type => String, { nullable: true })
-  token?: string
+  @Field((type) => String, { nullable: true })
+  token?: string;
 }
