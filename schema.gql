@@ -30,9 +30,6 @@ type Mutation {
   createSprint(end_date: DateTime!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
   createTicket(description: String!, estimated_timeframe: DateTime!, project: ProjectInput!, status: Float!, title: String!): Ticket!
   deleteAllCommentsByUser(user: UserInput!): [Comment!]!
-  deleteAllCurrentSprints: Sprint!
-  deleteAllFutureSprints: Sprint!
-  deleteAllPastSprints: Sprint!
   deleteAllProjects: [Project!]!
   deleteAllSprints: Sprint!
   deleteAllTicketsByProject(project: [ProjectInput!]!): Boolean!
@@ -51,7 +48,7 @@ type Mutation {
   updateRoleOfUserByProject(project: ProjectInput!, role: UserRole!, user: UserInput!): UserToProject!
   updateSprint(end_date: DateTime!, id: Float!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
   updateTicket(description: String!, estimated_timeframe: DateTime!, id: Float!, project: ProjectInput!, sprint: SprintInput!, status: Float!, title: String!): Ticket!
-  updateUser(age: Float!, email: String!, firstname: String!, lastname: String!, password: String!): User!
+  updateUser(email: String!, firstname: String!, lastname: String!, password: String!): User!
   updateproject(description: String!, end_date: DateTime!, id: ID!, picture: String!, start_date: DateTime!, tickets: [TicketInput!]!, title: String!): Project!
 }
 
@@ -94,14 +91,10 @@ input ProjectInput {
 type Query {
   getAllCommentsByTicket(ticket: TicketInput!): [Comment!]!
   getAllCommentsByUser(email: String!): [Comment!]!
-  getAllCurrentSprints: [Sprint!]!
-  getAllFutureSprints: [Sprint!]!
   getAllNotificationsByUser(user: UserInput!): [Notification!]!
-  getAllPastSprints: [Sprint!]!
   getAllProjects: [Project!]!
   getAllProjectsByUser(user: UserInput!): [Project!]!
   getAllProjectsByUserAndRole(role: UserRole!, user: UserInput!): [Project!]!
-  getAllSprints: [Sprint!]!
   getAllTickets: [Ticket!]!
   getAllTicketsByProject(project: ProjectInput!): [Ticket!]!
   getAllTicketsBySprint(sprint: SprintInput!): [Ticket!]!
@@ -112,7 +105,6 @@ type Query {
   getAllUsersByRole(role: UserRole!): [User!]!
   getOneComment(id: Float!): Comment!
   getOneProject(id: ID!): Project!
-  getOneSprint(id: ID!): Sprint!
   getOneTicket(id: Float!): Ticket!
   getOneUser(email: String!): User!
 }

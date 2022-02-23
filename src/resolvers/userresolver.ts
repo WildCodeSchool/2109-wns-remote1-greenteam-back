@@ -9,9 +9,6 @@ import User from '../entity/User';
 
 /*
 => Get a user by mail
-=> Get all users
-=> Get all notifications by user => Notification
-=> Get all comments by user => Comment
 => Add a user
 => Update a user
 => Delete a user
@@ -62,7 +59,6 @@ export default class UserResolver {
     @Arg('email') email: string,
     @Arg('firstname') firstname: string,
     @Arg('lastname') lastname: string,
-    @Arg('age') age: number,
     @Arg('password') password: string,
   ) {
     const userRepository: Repository<User> = getRepository(User);
