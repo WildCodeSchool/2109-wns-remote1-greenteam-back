@@ -16,7 +16,6 @@ import UserToProject, { UserRole } from '../entity/UserToProject';
 => Get all projects by user and role
 => Add a user to a project
 => Remove a user from a project
-=> Add a role to a user in a project
 => Update role of a user by project
 => Delete role of a user by project
 */
@@ -62,7 +61,7 @@ export default class UserToProjectResolver {
     return users;
   }
 
-  @Query((returns) => [User])
+  @Query((returns) => [Project])
   getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
@@ -73,18 +72,18 @@ export default class UserToProjectResolver {
     return projects;
   }
 
-  @Query((returns) => [User])
-  getAllRolesByUser(@Arg('user', (returns) => User) user: User) {
-    const usertoprojectRepository: Repository<UserToProject> =
-      getRepository(UserToProject);
-    const roles = usertoprojectRepository
-      .createQueryBuilder('usertoproject')
-      .where('usertoproject.user = :user', { user })
-      .getMany();
-    return roles;
-  }
+  // @Query((returns) => [User.role])
+  // getAllRolesByUser(@Arg('user', (returns) => User) user: User) {
+  //   const usertoprojectRepository: Repository<UserToProject> =
+  //     getRepository(UserToProject);
+  //   const roles = usertoprojectRepository
+  //     .createQueryBuilder('usertoproject')
+  //     .where('usertoproject.user = :user', { user })
+  //     .getMany();
+  //   return roles;
+  // }
 
-  @Query((returns) => [User])
+  @Query((returns) => [Project])
   getAllProjectsByUserAndRole(
     @Arg('user', (returns) => User) user: User,
     @Arg('role', (returns) => UserRole) role: UserRole
@@ -99,7 +98,7 @@ export default class UserToProjectResolver {
     return projects;
   }
 
-  @Mutation((returns) => User)
+  @Mutation((returns) => UserToProject)
   addUserToProject(
     @Arg('user', (returns) => User) user: User,
     @Arg('project', (returns) => Project) project: Project,
@@ -116,7 +115,7 @@ export default class UserToProjectResolver {
     return usertoproject;
   }
 
-  @Mutation((returns) => User)
+  @Mutation((returns) => UserToProject)
   async removeUserFromProject(
     @Arg('user', (returns) => User) user: User,
     @Arg('project', (returns) => Project) project: Project
@@ -132,25 +131,7 @@ export default class UserToProjectResolver {
     return usertoproject;
   }
 
-  @Mutation((returns) => User)
-  async addRoleToUserByProject(
-    @Arg('user', (returns) => User) user: User,
-    @Arg('project', (returns) => Project) project: Project,
-    @Arg('role', (returns) => UserRole) role: UserRole
-  ) {
-    const usertoprojectRepository: Repository<UserToProject> =
-      getRepository(UserToProject);
-    const usertoproject = usertoprojectRepository
-      .createQueryBuilder('usertoproject')
-      .where('usertoproject.user = :user', { user })
-      .andWhere('usertoproject.project = :project', { project })
-      .getOne();
-    (await usertoproject).role = role;
-    usertoprojectRepository.save(await usertoproject);
-    return usertoproject;
-  }
-
-  @Mutation((returns) => User)
+  @Mutation((returns) => UserToProject)
   async updateRoleOfUserByProject(
     @Arg('user', (returns) => User) user: User,
     @Arg('project', (returns) => Project) project: Project,
@@ -168,7 +149,7 @@ export default class UserToProjectResolver {
     return usertoproject;
   }
 
-  @Mutation((returns) => User)
+  @Mutation((returns) => UserToProject)
   async deleteRoleOfUserByProject(
     @Arg('user', (returns) => User) user: User,
     @Arg('project', (returns) => Project) project: Project

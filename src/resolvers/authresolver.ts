@@ -28,7 +28,6 @@ export default class AuthResolver {
         message: "Aucun utilisateur avec cet email n'existe chez nous.",
       };
 
-    // @ts-ignore
     if (!(await userToFind.verifyPassword(password)))
       return {
         statusCode: 400,

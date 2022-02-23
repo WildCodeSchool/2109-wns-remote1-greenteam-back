@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, Int, InputType } from 'type-graphql';
+import { Field, ID, ObjectType, InputType } from 'type-graphql';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 import { Length } from 'class-validator';
@@ -56,7 +56,6 @@ export default class User {
       email: this.email,
       lastName: this.lastName,
       firstName: this.firstName,
-      age: this.age,
       notifications: this.notifications,
     };
 

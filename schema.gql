@@ -23,8 +23,7 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Mutation {
-  addRoleToUserByProject(project: ProjectInput!, role: UserRole!, user: UserInput!): User!
-  addUserToProject(project: ProjectInput!, role: UserRole!, user: UserInput!): User!
+  addUserToProject(project: ProjectInput!, role: UserRole!, user: UserInput!): UserToProject!
   createComment(content: String!, ticket: TicketInput!, user: UserInput!): Comment!
   createNotification(description: String!, title: String!, user: UserInput!): Notification!
   createProject(description: String!, end_date: DateTime!, picture: String!, start_date: DateTime!, title: String!): Project!
@@ -45,16 +44,16 @@ type Mutation {
   deleteComment(id: Float!): Comment!
   deleteNotification(id: Float!, user: UserInput!): Notification!
   deleteProject(id: Float!): Project!
-  deleteRoleOfUserByProject(project: ProjectInput!, user: UserInput!): User!
+  deleteRoleOfUserByProject(project: ProjectInput!, user: UserInput!): UserToProject!
   deleteSprint(id: Float!): Sprint!
   deleteTicket(id: Float!): Ticket!
   deleteUser(id: ID!): User!
   login(email: String!, password: String!): UserResponse!
   register(age: Float!, email: String!, firstname: String!, lastname: String!, password: String!): UserResponse!
-  removeUserFromProject(project: ProjectInput!, user: UserInput!): User!
+  removeUserFromProject(project: ProjectInput!, user: UserInput!): UserToProject!
   updateComment(content: String!, id: Float!): Comment!
   updateNotification(description: String!, id: Float!, title: String!, user: UserInput!): Notification!
-  updateRoleOfUserByProject(project: ProjectInput!, role: UserRole!, user: UserInput!): User!
+  updateRoleOfUserByProject(project: ProjectInput!, role: UserRole!, user: UserInput!): UserToProject!
   updateSprint(end_date: DateTime!, id: Float!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
   updateTicket(description: String!, estimated_timeframe: DateTime!, id: Float!, project: ProjectInput!, sprint: SprintInput!, status: Float!, title: String!): Ticket!
   updateUser(age: Float!, email: String!, firstname: String!, lastname: String!, password: String!): User!
@@ -109,9 +108,8 @@ type Query {
   getAllPastProjects: [Project!]!
   getAllPastSprints: [Sprint!]!
   getAllProjects: [Project!]!
-  getAllProjectsByUser(user: UserInput!): [User!]!
-  getAllProjectsByUserAndRole(role: UserRole!, user: UserInput!): [User!]!
-  getAllRolesByUser(user: UserInput!): [User!]!
+  getAllProjectsByUser(user: UserInput!): [Project!]!
+  getAllProjectsByUserAndRole(role: UserRole!, user: UserInput!): [Project!]!
   getAllSprints: [Sprint!]!
   getAllTickets: [Ticket!]!
   getAllTicketsByProject(project: ProjectInput!): [Ticket!]!
@@ -168,7 +166,6 @@ input TicketInput {
 }
 
 type User {
-  age: Int!
   comments: [Comment!]!
   email: String!
   firstName: String!
@@ -178,7 +175,6 @@ type User {
 }
 
 input UserInput {
-  age: Int!
   comments: [CommentInput!]!
   email: String!
   firstName: String!
@@ -198,4 +194,11 @@ enum UserRole {
   ADMIN
   DEVELOPER
   PRODUCT_MANAGER
+}
+
+type UserToProject {
+  id: ID!
+  project: Project!
+  role: UserRole!
+  user: User!
 }
