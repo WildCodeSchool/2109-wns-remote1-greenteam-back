@@ -8,15 +8,9 @@ import Ticket from '../entity/Ticket';
 
 /*
 => Get a project by id
-=> Get all current projects
-=> Get all past projects
-=> Get all future projects
 => Get all projects
 => Create a project
 => Delete a project
-=> Delete all past projects
-=> Delete all future projects
-=> Delete all current projects
 => Delete all projects
 => Update a project
 */
@@ -31,45 +25,6 @@ export default class ProjectResolver {
       .where('project.id = :id', { id })
       .getOne();
     return project;
-  }
-
-  @Query((returns) => [Project])
-  getAllCurrentProjects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
-      .where(
-          'start_date<=:today', { today: new Date() }
-      )
-      .andWhere(
-        'end_date>=:today', { today: new Date() }
-      )
-      .getMany();
-    return projects;
-  }
-
-  @Query((returns) => [Project])
-  getAllPastProjects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
-      .where(
-        'end_date<=:today', { today: new Date() }
-      )
-      .getMany();
-    return projects;
-  }
-
-  @Query((returns) => [Project])
-  getAllFutureProjects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
-      .where(
-        'start_date>=:today', { today: new Date() }
-      )
-      .getMany();
-    return projects;
   }
 
   @Query((returns) => [Project])
@@ -108,54 +63,6 @@ export default class ProjectResolver {
       .getOne();
     projectRepository.delete(await project);
     return project;
-  }
-
-  @Mutation((returns) => [Project])
-  async deleteAllPastProjects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
-      .where(
-        'end_date<=:today', { today: new Date() }
-      )
-      .getMany();
-    (await projects).forEach(async (project) => {
-      projectRepository.delete(project);
-    });
-    return projects;
-  }
-
-  @Mutation((returns) => [Project])
-  async deleteAllFutureProjects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
-      .where(
-        'start_date>=:today', { today: new Date() }
-      )
-      .getMany();
-    (await projects).forEach(async (project) => {
-      projectRepository.delete(project);
-    });
-    return projects;
-  }
-
-  @Mutation((returns) => [Project])
-  async deleteAllCurrentProjects() {
-    const projectRepository: Repository<Project> = getRepository(Project);
-    const projects = projectRepository
-      .createQueryBuilder('project')
-      .where(
-        'start_date<=:today', { today: new Date() }
-      )
-      .andWhere(
-        'end_date>=:today', { today: new Date() }
-      )
-      .getMany();
-    (await projects).forEach(async (project) => {
-      projectRepository.delete(project);
-    });
-    return projects;
   }
 
   @Mutation((returns) => [Project])
