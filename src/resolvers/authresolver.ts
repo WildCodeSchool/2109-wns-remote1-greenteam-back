@@ -48,10 +48,9 @@ export default class AuthResolver {
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Arg('lastname') lastname: string,
-    @Arg('firstname') firstname: string,
-    @Arg('age') age: number
+    @Arg('firstname') firstname: String
   ) {
-    if (!email || !password || !lastname || !firstname || !age)
+    if (!email || !password || !lastname || !firstname)
       throw new Error('Veuillez remplir correctement le formulaire');
 
     const userRepository: Repository<User> = getRepository(User);
