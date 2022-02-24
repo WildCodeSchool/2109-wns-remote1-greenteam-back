@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import { Resolver, Query, Arg, Mutation } from 'type-graphql';
-import { getRepository, Repository } from 'typeorm';
+import { createQueryBuilder, getRepository, Repository } from 'typeorm';
 import Project from '../entity/Project';
 import User from '../entity/User';
 import UserToProject, { UserRole } from '../entity/UserToProject';
@@ -60,7 +60,7 @@ export default class UserToProjectResolver {
   }
 
   @Query((returns) => [Project])
-  async getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
+  getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
     const usertoprojectquery = usertoprojectRepository.find({
