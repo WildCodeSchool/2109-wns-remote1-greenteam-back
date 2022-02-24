@@ -59,11 +59,6 @@ export default class UserToProjectResolver {
     return users;
   }
 
-  /*
-  - Fix query ✅
-  - Add condition to check if user is already in project 
-  */
-
   @Query((returns) => [Project])
   async getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
