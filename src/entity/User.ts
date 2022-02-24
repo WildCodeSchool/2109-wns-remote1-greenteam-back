@@ -33,13 +33,13 @@ export default class User {
   @Field((type) => [Notification])
   @OneToMany(() => Notification, (notification) => notification.user, {
     cascade: true,
-})
+  })
   notifications: Notification[];
 
   @Field((type) => [Comment])
   @OneToMany(() => Comment, (comment) => comment.user, {
     cascade: true,
-})
+  })
   comments: Comment[];
 
   async encryptPassword(password: string) {

@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Field, ID, InputType, ObjectType, registerEnumType  } from 'type-graphql';
+import {
+  Field,
+  ID,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from 'type-graphql';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Project from './Project';
 import User from './User';
@@ -12,9 +18,9 @@ export enum UserRole {
 }
 
 registerEnumType(UserRole, {
-    name: "UserRole", // this one is mandatory
-    description: "The basic roles", // this one is optional
-  });
+  name: 'UserRole', // this one is mandatory
+  description: 'The basic roles', // this one is optional
+});
 
 @ObjectType()
 @InputType('UserToProjectInput')

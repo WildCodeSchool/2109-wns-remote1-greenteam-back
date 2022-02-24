@@ -51,6 +51,6 @@ export default class Ticket {
   @Field((type) => [Comment])
   @OneToMany(() => Comment, (comment) => comment.ticket, {
     cascade: true,
-})
+  })
   comments: Comment[];
 }

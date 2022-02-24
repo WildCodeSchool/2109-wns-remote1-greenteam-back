@@ -35,6 +35,6 @@ export default class Project {
   @Field((type) => [Ticket])
   @OneToMany(() => Ticket, (ticket) => ticket.project, {
     cascade: true,
-})
+  })
   tickets: Ticket[];
 }

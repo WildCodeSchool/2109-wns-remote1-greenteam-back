@@ -18,7 +18,7 @@ import Ticket from '../entity/Ticket';
 @Resolver(Project)
 export default class ProjectResolver {
   @Query((returns) => Project)
-  getOneProject(@Arg('id', type => ID) id: string) {
+  getOneProject(@Arg('id', (type) => ID) id: string) {
     const projectRepository: Repository<Project> = getRepository(Project);
     const project = projectRepository
       .createQueryBuilder('project')
@@ -77,7 +77,7 @@ export default class ProjectResolver {
 
   @Mutation((returns) => Project)
   async updateproject(
-    @Arg('id', type => ID) id: string,
+    @Arg('id', (type) => ID) id: string,
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('picture') picture: string,

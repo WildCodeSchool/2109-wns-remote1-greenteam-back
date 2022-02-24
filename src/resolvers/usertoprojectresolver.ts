@@ -34,9 +34,7 @@ export default class UserToProjectResolver {
   }
 
   @Query((returns) => [User])
-  getAllUsersByProject(
-    @Arg('project', (returns) => Project) project: Project
-  ) {
+  getAllUsersByProject(@Arg('project', (returns) => Project) project: Project) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
     const users = usertoprojectRepository
@@ -61,14 +59,19 @@ export default class UserToProjectResolver {
     return users;
   }
 
+  /*
+  - Fix query
+  - Add condition to check if user is already in project 
+  */
+
   @Query((returns) => [Project])
   getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    const projects = usertoprojectRepository
-      .createQueryBuilder('usertoproject')
-      .where('usertoproject.user = :user', { user })
-      .getMany();
+    const projects = usertoprojectRepository.find({
+      where: { user },
+      relations: ['user', 'project'],
+    });
     return projects;
   }
 
@@ -111,8 +114,7 @@ export default class UserToProjectResolver {
       project,
       role,
     });
-    usertoprojectRepository.save(usertoproject);
-    return usertoproject;
+    return usertoprojectRepository.save(usertoproject);
   }
 
   @Mutation((returns) => UserToProject)

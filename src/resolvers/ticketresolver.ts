@@ -67,7 +67,7 @@ export default class TicketResolver {
   @Query((returns) => [Ticket])
   getAllTickets() {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
-    const tickets = ticketRepository.find({ relations: ["project"]});
+    const tickets = ticketRepository.find({ relations: ['project'] });
     return tickets;
   }
 
@@ -127,7 +127,9 @@ export default class TicketResolver {
   }
 
   @Mutation((returns) => Boolean)
-  async deleteAllTicketsBySprint(@Arg('sprint', (returns) => [Sprint]) sprint: Sprint) {
+  async deleteAllTicketsBySprint(
+    @Arg('sprint', (returns) => [Sprint]) sprint: Sprint
+  ) {
     const ticketRepository: Repository<Ticket> = getRepository(Ticket);
     const tickets = ticketRepository
       .createQueryBuilder('ticket')

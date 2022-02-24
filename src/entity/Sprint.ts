@@ -23,6 +23,6 @@ export default class Sprint {
   @Field((type) => [Ticket])
   @OneToMany(() => Ticket, (ticket) => ticket.sprint, {
     cascade: true,
-})
+  })
   tickets: Ticket[];
 }
