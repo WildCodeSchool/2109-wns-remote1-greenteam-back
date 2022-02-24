@@ -23,4 +23,16 @@ services:
       MYSQL_USER: "valere_collabee"
       MYSQL_PASSWORD: "collabee"
       MYSQL_DATABASE: "collabee"
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: collabee
+      links:
+        - mysql
+      environment:
+        PMA_HOST: mysql
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
+      restart: always
+      ports:
+        - 8081:80
 
