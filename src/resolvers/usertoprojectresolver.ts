@@ -60,18 +60,21 @@ export default class UserToProjectResolver {
   }
 
   /*
-  - Fix query
+  - Fix query ✅
   - Add condition to check if user is already in project 
   */
 
   @Query((returns) => [Project])
-  getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
+  async getAllProjectsByUser(@Arg('user', (returns) => User) user: User) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    const projects = usertoprojectRepository.find({
+    const usertoprojectquery = usertoprojectRepository.find({
       where: { user },
       relations: ['user', 'project'],
     });
+    const projects = usertoprojectquery.then((p) =>
+      p.map((usertoproject) => usertoproject.project)
+    );
     return projects;
   }
 
@@ -109,12 +112,15 @@ export default class UserToProjectResolver {
   ) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    const usertoproject = usertoprojectRepository.create({
-      user,
-      project,
-      role,
-    });
-    return usertoprojectRepository.save(usertoproject);
+    if (!usertoprojectRepository.findOne({ where: { user, project } })) {
+      const usertoproject = usertoprojectRepository.create({
+        user,
+        project,
+        role,
+      });
+      return usertoprojectRepository.save(usertoproject);
+    }
+    return new Error('User is already in project');
   }
 
   @Mutation((returns) => UserToProject)
