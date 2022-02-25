@@ -16,7 +16,11 @@ async function bootstrap() {
   const server = new ApolloServer({
     schema,
     cors: {
-      origin: '*',
+      origin: [
+        process.env.CLIENT_APP_ORIGIN || 'http://localhost:3000',
+        'https://studio.apollographql.com',
+      ],
+      credentials: true,
     },
     context: {
       bdd: connectBdd,
