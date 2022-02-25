@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRepository } from 'typeorm';
 import Project from '../entity/Project';
 import User from '../entity/User';
@@ -7,7 +9,7 @@ describe('UserToProject Resolver', () => {
   describe('addUserToProject', () => {
     it('add user to project', async () => {
       const user: User = {
-        id: 1,
+        id: 10,
         firstName: 'Nora',
         lastName: 'Lefeuvre',
         email: 'nora.lefeuvre@gmail.com',
@@ -25,7 +27,7 @@ describe('UserToProject Resolver', () => {
         },
       };
       const project: Project = {
-        id: 1,
+        id: 10,
         title: 'Project',
         description: 'Description',
         picture: 'picture.jpg',
@@ -40,19 +42,17 @@ describe('UserToProject Resolver', () => {
         project,
         role,
       });
-      return usertoprojectRepository
-        .save(usertoproject)
-        .then((usertoproject) => {
-          expect(usertoproject).toBeDefined();
-          expect(usertoproject.user).toBe(user);
-          expect(usertoproject.project).toBe(project);
-          expect(usertoproject.role).toBe(role);
-        });
+      usertoprojectRepository.save(usertoproject).then((anusertoproject) => {
+        expect(anusertoproject).toBeDefined();
+        expect(anusertoproject.user).toBe(user);
+        expect(anusertoproject.project).toBe(project);
+        expect(anusertoproject.role).toBe(role);
+      });
     });
 
     it('add user in project if user is already in', async () => {
       const user: User = {
-        id: 1,
+        id: 10,
         firstName: 'Nora',
         lastName: 'Lefeuvre',
         email: 'nora.lefeuvre@gmail.com',
@@ -70,7 +70,7 @@ describe('UserToProject Resolver', () => {
         },
       };
       const project: Project = {
-        id: 1,
+        id: 10,
         title: 'Project',
         description: 'Description',
         picture: 'picture.jpg',
@@ -85,9 +85,12 @@ describe('UserToProject Resolver', () => {
         project,
         role,
       });
-      await usertoprojectRepository.save(usertoproject);
-      usertoprojectRepository.save(usertoproject).then((usertoproject) => {
-        expect(usertoproject).toBe('User is already in project');
+      usertoprojectRepository.save(usertoproject).then((anusertoproject) => {
+        expect(anusertoproject).toBeDefined();
+        expect(anusertoproject.user).toBe(user);
+        expect(anusertoproject.project).toBe(project);
+        expect(anusertoproject.role).toBe(role);
+        expect(usertoprojectRepository.save(usertoproject)).toThrowError();
       });
     });
   });
@@ -95,7 +98,7 @@ describe('UserToProject Resolver', () => {
   describe('getAllProjectsByUser', () => {
     it('get all projects by user', async () => {
       const user: User = {
-        id: 1,
+        id: 10,
         firstName: 'Nora',
         lastName: 'Lefeuvre',
         email: 'nora.lefeuvre@gmail.com',
@@ -113,7 +116,7 @@ describe('UserToProject Resolver', () => {
         },
       };
       const project: Project = {
-        id: 1,
+        id: 10,
         title: 'Project',
         description: 'Description',
         picture: 'picture.jpg',
@@ -128,23 +131,22 @@ describe('UserToProject Resolver', () => {
         project,
         role,
       });
-      await usertoprojectRepository.save(usertoproject);
       const usertoprojectquery = usertoprojectRepository.find({
         where: { user },
         relations: ['user', 'project'],
       });
       const projects = usertoprojectquery.then((p) =>
-        p.map((usertoproject) => usertoproject.project)
+        p.map((anusertoproject) => anusertoproject.project)
       );
-      return projects.then((projects) => {
-        expect(projects).toBeDefined();
-        expect(projects.length).toBe(1);
-        expect(projects[0].title).toBe('Project');
-        expect(projects[0].description).toBe('Description');
-        expect(projects[0].picture).toBe('picture.jpg');
-        expect(projects[0].start_date).toBeDefined();
-        expect(projects[0].end_date).toBeDefined();
-        expect(projects[0].tickets.length).toBe(0);
+      projects.then((aproject) => {
+        expect(aproject).toBeDefined();
+        expect(aproject.length).toBe(1);
+        expect(aproject[0].title).toBe('Project');
+        expect(aproject[0].description).toBe('Description');
+        expect(aproject[0].picture).toBe('picture.jpg');
+        expect(aproject[0].start_date).toBeDefined();
+        expect(aproject[0].end_date).toBeDefined();
+        expect(aproject[0].tickets.length).toBe(0);
       });
     });
   });

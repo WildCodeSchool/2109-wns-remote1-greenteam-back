@@ -47,7 +47,7 @@ export default class User {
   }
 
   async verifyPassword(password: string) {
-    return await bcrypt.compare(password, this.password);
+    return bcrypt.compare(password, this.password);
   }
 
   generateToken() {

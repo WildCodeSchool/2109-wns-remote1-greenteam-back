@@ -1,3 +1,4 @@
+import { getRepository } from 'typeorm';
 import User from '../entity/User';
 import UserResolver from '../resolvers/userresolver';
 
@@ -10,6 +11,7 @@ describe('le resolver user', () => {
     usertoreceive.lastName = 'Preney';
     usertoreceive.email = 'valerepreney@hotmail.fr';
     usertoreceive.password = '';
+    await getRepository(User).save(usertoreceive);
     expect(await userresolver.getOneUser('valerepreney@hotmail.fr')).toEqual(
       usertoreceive
     );
