@@ -1,15 +1,30 @@
-import express from 'express';
-import cors from 'cors';
-import { port } from './settings';
+import 'reflect-metadata';
+import { ApolloServer } from 'apollo-server';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { buildSchema } from 'type-graphql';
+import initConnectDb from './database/database';
+import Resolvers from './resolvers/resolvers';
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const port = process.env.PORT || 5000;
+async function bootstrap() {
+  const connectBdd = await initConnectDb();
+  const schema = await buildSchema({
+    resolvers: Resolvers,
+    emitSchemaFile: true,
+  });
+  // @ts-ignore
+  const server = new ApolloServer({
+    schema,
+    cors: {
+      origin: '*',
+    },
+    context: {
+      bdd: connectBdd,
+    },
+  });
 
-app.get('/api/dummy-endpoint', (req, res) =>
-  res.send({
-    message: 'Hello from the backend',
-  })
-);
+  const { url } = await server.listen(port);
+  console.log(`Serveur lancé sur ${url}`);
+}
 
-app.listen(port, () => console.log(`listening on ${port}`));
+bootstrap();
