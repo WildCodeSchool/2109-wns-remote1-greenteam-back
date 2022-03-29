@@ -27,6 +27,10 @@ export default class User {
   @Column()
   email: string;
 
+  @Field()
+  @Column()
+  admin: boolean;
+
   @Column()
   password: string;
 

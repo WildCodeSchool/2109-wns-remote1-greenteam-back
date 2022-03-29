@@ -13,7 +13,6 @@ import User from './User';
 
 export enum UserRole {
   DEVELOPER = 'developer',
-  ADMIN = 'admin',
   PRODUCT_MANAGER = 'project_manager',
 }
 
