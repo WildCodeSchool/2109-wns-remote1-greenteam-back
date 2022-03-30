@@ -11,6 +11,7 @@ import {
 import Project from '../entity/Project';
 import User from '../entity/User';
 import UserToProject, { UserRole } from '../entity/UserToProject';
+import UserWithRole from '../entity/UserWithRole';
 
 /*
 => Get all users by role
@@ -38,21 +39,18 @@ export default class UserToProjectResolver {
     return users;
   }
 
-  @Query((returns) => [User])
+  @Query((returns) => [UserWithRole])
   async getAllUsersByProject(@Arg('projectId') projectId: string) {
-    const usertoprojectRepository: Repository<UserToProject> =
-      getRepository(UserToProject);
-    // const users = usertoprojectRepository
-    //   .createQueryBuilder('usertoproject')
-    //   .where('usertoproject.project = :project', { project })
-    //   .getMany();
-    const users = await getConnection()
-      .getRepository(User)
+    const userRepository: Repository<User> = getRepository(User);
+    const sql = userRepository
       .createQueryBuilder('user')
+      .select('user.*')
+      .addSelect('utp.role', 'role')
       .leftJoin('user_to_project', 'utp', 'utp.userId = user.id')
-      .leftJoinAndSelect('project', 'project', 'project.id = utp.projectId')
+      .leftJoin('project', 'project', 'project.id = utp.projectId')
       .where('project.id = :projectId', { projectId })
-      .getMany();
+      .getSql();
+    const users = await getConnection().query(sql, [projectId]);
     return users;
   }
 
