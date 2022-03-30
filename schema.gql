@@ -100,7 +100,7 @@ type Query {
   getAllTicketsBySprint(sprint: SprintInput!): [Ticket!]!
   getAllTicketsByStatus(status: Float!): [Ticket!]!
   getAllUsers: [User!]!
-  getAllUsersByProject(project: ProjectInput!): [User!]!
+  getAllUsersByProject(projectId: String!): [User!]!
   getAllUsersByProjectAndRole(project: ProjectInput!, role: UserRole!): [User!]!
   getAllUsersByRole(role: UserRole!): [User!]!
   getOneComment(id: Float!): Comment!

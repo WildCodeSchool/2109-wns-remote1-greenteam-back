@@ -2,7 +2,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import { Resolver, Query, Arg, Mutation } from 'type-graphql';
-import { createQueryBuilder, getRepository, Repository } from 'typeorm';
+import {
+  createQueryBuilder,
+  getConnection,
+  getRepository,
+  Repository,
+} from 'typeorm';
 import Project from '../entity/Project';
 import User from '../entity/User';
 import UserToProject, { UserRole } from '../entity/UserToProject';
@@ -34,12 +39,19 @@ export default class UserToProjectResolver {
   }
 
   @Query((returns) => [User])
-  getAllUsersByProject(@Arg('project', (returns) => Project) project: Project) {
+  async getAllUsersByProject(@Arg('projectId') projectId: string) {
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    const users = usertoprojectRepository
-      .createQueryBuilder('usertoproject')
-      .where('usertoproject.project = :project', { project })
+    // const users = usertoprojectRepository
+    //   .createQueryBuilder('usertoproject')
+    //   .where('usertoproject.project = :project', { project })
+    //   .getMany();
+    const users = await getConnection()
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoin('user_to_project', 'utp', 'utp.userId = user.id')
+      .leftJoinAndSelect('project', 'project', 'project.id = utp.projectId')
+      .where('project.id = :projectId', { projectId })
       .getMany();
     return users;
   }
