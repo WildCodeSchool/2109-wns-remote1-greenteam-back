@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
+import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import { Context } from 'apollo-server-core';
 import * as Cookie from "js-cookie"
@@ -97,5 +97,23 @@ export default class AuthResolver {
     } catch (e) {
       return e;
     }
+  }
+
+  @Query(() => UserResponse)
+  async logout(@Ctx() ctx: ContextResponse){
+
+    try {
+      ctx.res.clearCookie("user-token")
+      return {
+        statusCode: 201,
+        message: 'Déconnexion',
+      };
+    }catch (e) {
+      return {
+        statusCode: 400,
+        message: 'Erreur lors de la déconnexion',
+      };
+    }
+
   }
 }
