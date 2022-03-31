@@ -1,30 +1,42 @@
 import 'reflect-metadata';
-import { ApolloServer } from 'apollo-server';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { buildSchema } from 'type-graphql';
+import { ApolloServer } from 'apollo-server-express';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import * as express from 'express';
+import * as cors from "cors"
+import * as http from 'http';
 import initConnectDb from './database/database';
-import Resolvers from './resolvers/resolvers';
+import resolvers from './resolvers/resolvers';
 
 const port = process.env.PORT || 5000;
 async function bootstrap() {
-  const connectBdd = await initConnectDb();
+  await initConnectDb();
   const schema = await buildSchema({
-    resolvers: Resolvers,
+    // @ts-ignore
+    resolvers,
     emitSchemaFile: true,
   });
   // @ts-ignore
+  const app = express();
+  app.use(cors({
+    origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+    credentials: true,
+    allowedHeaders: ["apollographql-client-name", 'Content-Type'],
+
+  }))
+  const httpServer = http.createServer(app);
   const server = new ApolloServer({
     schema,
-    cors: {
-      origin: '*',
-    },
-    context: {
-      bdd: connectBdd,
-    },
+    context: ({res}) => ({
+      res
+    }),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
+  await server.start();
+  server.applyMiddleware({ app, cors: false });
+  await new Promise<void>(resolve => httpServer.listen({ port }, resolve));
+  console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
 
-  const { url } = await server.listen(port);
-  console.log(`Serveur lancé sur ${url}`);
 }
 
 bootstrap();

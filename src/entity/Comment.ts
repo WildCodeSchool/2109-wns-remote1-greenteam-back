@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */ import {
+/* eslint-disable no-unused-vars */
+import {
   Field,
   ID,
   InputType,

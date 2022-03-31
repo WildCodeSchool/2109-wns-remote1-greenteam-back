@@ -127,6 +127,7 @@ type Query {
   getOneSprint(id: ID!): Sprint!
   getOneTicket(id: Float!): Ticket!
   getOneUser(email: String!): User!
+  verify: UserResponse!
 }
 
 type Sprint {
