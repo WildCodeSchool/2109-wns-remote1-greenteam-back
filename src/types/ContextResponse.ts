@@ -1,8 +1,9 @@
-import {ServerResponse} from 'http';
+import {Request, Response} from 'express';
 
 
 interface ContextResponse{
-  res: ServerResponse
+  req: Request
+  res: Response
 }
 
 export default ContextResponse

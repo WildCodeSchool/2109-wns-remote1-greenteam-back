@@ -5,6 +5,7 @@ import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import * as express from 'express';
 import * as cors from "cors"
 import * as http from 'http';
+import * as cookieParser from 'cookie-parser';
 import initConnectDb from './database/database';
 import resolvers from './resolvers/resolvers';
 
@@ -18,6 +19,7 @@ async function bootstrap() {
   });
   // @ts-ignore
   const app = express();
+  app.use(cookieParser());
   app.use(cors({
     origin: ["http://localhost:3000", "https://studio.apollographql.com"],
     credentials: true,
@@ -27,7 +29,8 @@ async function bootstrap() {
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     schema,
-    context: ({res}) => ({
+    context: ({req, res}) => ({
+      req,
       res
     }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
