@@ -17,6 +17,7 @@ module.exports = {
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'no-unused-vars': ['error', { varsIgnorePattern: 'returns' }],
     'import/no-cycle': 'off',
+    'class-methods-use-this': 'off'
   },
   ignorePatterns: ['.eslintrc.js'],
 };
