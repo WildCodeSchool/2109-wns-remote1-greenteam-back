@@ -168,35 +168,27 @@ export default class UserToProjectResolver {
 
   @Mutation((returns) => UserToProject)
   async updateRoleOfUserByProject(
-    @Arg('user', (returns) => User) user: User,
-    @Arg('project', (returns) => Project) project: Project,
+    @Arg('userId') userId: string,
+    @Arg('projectId') projectId: string,
     @Arg('role', (returns) => UserRole) role: UserRole
   ) {
+    const userRepository: Repository<User> = getRepository(User);
+    const user = await userRepository.findOne(userId);
+    const projectRepository: Repository<Project> = getRepository(Project);
+    const project = await projectRepository.findOne(projectId);
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    const usertoproject = usertoprojectRepository
+    const utp = await usertoprojectRepository
       .createQueryBuilder('usertoproject')
-      .where('usertoproject.user = :user', { user })
-      .andWhere('usertoproject.project = :project', { project })
+      .where('usertoproject.user = :userId', { userId })
+      .andWhere('usertoproject.project = :projectId', { projectId })
+      .innerJoinAndSelect('usertoproject.user', 'user')
       .getOne();
-    (await usertoproject).role = role;
-    usertoprojectRepository.save(await usertoproject);
-    return usertoproject;
-  }
-
-  @Mutation((returns) => UserToProject)
-  async deleteRoleOfUserByProject(
-    @Arg('user', (returns) => User) user: User,
-    @Arg('project', (returns) => Project) project: Project
-  ) {
-    const usertoprojectRepository: Repository<UserToProject> =
-      getRepository(UserToProject);
-    const usertoproject = usertoprojectRepository
-      .createQueryBuilder('usertoproject')
-      .where('usertoproject.user = :user', { user })
-      .andWhere('usertoproject.project = :project', { project })
-      .getOne();
-    usertoprojectRepository.remove(await usertoproject);
-    return usertoproject;
+    if (utp) {
+      utp.role = role;
+      await usertoprojectRepository.save(utp);
+      return utp;
+    }
+    return new Error('User not in project');
   }
 }
