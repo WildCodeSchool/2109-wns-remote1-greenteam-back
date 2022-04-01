@@ -1,22 +1,20 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
 import { Context } from 'apollo-server-core';
-import * as Cookie from "js-cookie";
+import * as Cookie from 'js-cookie';
 import User from '../entity/User';
 import UserResponse from '../types/UserResponse';
 import ContextResponse from '../types/ContextResponse';
-
-
-
-
-
 
 @Resolver(User)
 export default class AuthResolver {
   @Mutation(() => UserResponse)
   // eslint-disable-next-line class-methods-use-this
-  async login(@Arg('email') email: string, @Arg('password') password: string, @Ctx() ctx: ContextResponse) {
-
+  async login(
+    @Arg('email') email: string,
+    @Arg('password') password: string,
+    @Ctx() ctx: ContextResponse
+  ) {
     if (!email || !password)
       return {
         statusCode: 400,
@@ -44,8 +42,8 @@ export default class AuthResolver {
     // @ts-ignore
     const token = userToFind.generateToken();
 
-    const cookie = `user-token=${token}; HttpOnly`
-     ctx.res.setHeader("Set-Cookie", [cookie])
+    const cookie = `user-token=${token}; HttpOnly`;
+    ctx.res.setHeader('Set-Cookie', [cookie]);
 
     return {
       statusCode: 201,
@@ -60,12 +58,9 @@ export default class AuthResolver {
     @Arg('password') password: string,
     @Arg('lastname') lastname: string,
     @Arg('firstname') firstname: string,
-    @Arg('age') age: number,
-    @Ctx() ctx:Context
+    @Ctx() ctx: Context
   ) {
-
-
-    if (!email || !password || !lastname || !firstname || !age)
+    if (!email || !password || !lastname || !firstname)
       throw new Error('Veuillez remplir correctement le formulaire');
 
     const userRepository: Repository<User> = getRepository(User);
@@ -87,7 +82,7 @@ export default class AuthResolver {
 
       // @ts-ignore
       const token = user.generateToken();
-      ctx['result'].cookie('user-token', token)
+      ctx['result'].cookie('user-token', token);
       return {
         statusCode: 201,
         message: 'Merci pour votre inscription',
@@ -98,20 +93,18 @@ export default class AuthResolver {
   }
 
   @Query(() => UserResponse)
-  async logout(@Ctx() ctx: ContextResponse){
-
+  async logout(@Ctx() ctx: ContextResponse) {
     try {
-      ctx.res.clearCookie("user-token")
+      ctx.res.clearCookie('user-token');
       return {
         statusCode: 201,
         message: 'Déconnexion',
       };
-    }catch (e) {
+    } catch (e) {
       return {
         statusCode: 400,
         message: 'Erreur lors de la déconnexion',
       };
     }
-
   }
 }

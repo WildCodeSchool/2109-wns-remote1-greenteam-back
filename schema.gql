@@ -107,6 +107,8 @@ type Query {
   getOneProject(id: ID!): Project!
   getOneTicket(id: Float!): Ticket!
   getOneUser(email: String!): User!
+  logout: UserResponse!
+  verifyUser: User!
 }
 
 type Sprint {
