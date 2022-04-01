@@ -10,6 +10,8 @@
     "fmt-lint": "yarn run prettify && yarn run lint",
     "start": "ts-node src/index.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "docker-start": "docker-compose -f docker-compose.yml up",
+    "docker-build": "docker-compose -f docker-compose.yml up --build",
     "test": "jest"
   },
   "dependencies": {
