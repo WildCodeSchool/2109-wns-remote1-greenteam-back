@@ -109,39 +109,61 @@ export default class UserToProjectResolver {
     return projects;
   }
 
-  @Mutation((returns) => UserToProject)
-  addUserToProject(
-    @Arg('user', (returns) => User) user: User,
-    @Arg('project', (returns) => Project) project: Project,
+  @Mutation((returns) => UserToProject || Error)
+  async addUserToProject(
+    @Arg('userId') userId: string,
+    @Arg('projectId') projectId: string,
     @Arg('role', (returns) => UserRole) role: UserRole
   ) {
+    const userRepository: Repository<User> = getRepository(User);
+    const user = await userRepository.findOne(userId);
+    const projectRepository: Repository<Project> = getRepository(Project);
+    const project = await projectRepository.findOne(projectId);
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    if (!usertoprojectRepository.findOne({ where: { user, project } })) {
-      const usertoproject = usertoprojectRepository.create({
+    const sql = usertoprojectRepository
+      .createQueryBuilder('usertoproject')
+      .where('usertoproject.user = :userId', { userId })
+      .andWhere('usertoproject.project = :projectId', { projectId })
+      .getSql();
+    const usertoproject = await getConnection().query(sql, [userId, projectId]);
+    if (usertoproject.length === 0) {
+      const usertoprojectToAdd = usertoprojectRepository.create({
         user,
         project,
         role,
       });
-      return usertoprojectRepository.save(usertoproject);
+      await usertoprojectRepository.save(usertoprojectToAdd);
+      return usertoprojectToAdd;
     }
-    return new Error('User is already in project');
+    return new Error('User already in project');
   }
 
-  @Mutation((returns) => UserToProject)
+  @Mutation((returns) => UserToProject || Error)
   async removeUserFromProject(
-    @Arg('user', (returns) => User) user: User,
-    @Arg('project', (returns) => Project) project: Project
+    @Arg('userId') userId: string,
+    @Arg('projectId') projectId: string
   ) {
+    const userRepository: Repository<User> = getRepository(User);
+    const user = await userRepository.findOne(userId);
+    const projectRepository: Repository<Project> = getRepository(Project);
+    const project = await projectRepository.findOne(projectId);
     const usertoprojectRepository: Repository<UserToProject> =
       getRepository(UserToProject);
-    const usertoproject = usertoprojectRepository
+    const utp = await usertoprojectRepository
       .createQueryBuilder('usertoproject')
-      .where('usertoproject.user = :user', { user })
-      .andWhere('usertoproject.project = :project', { project })
+      .where('usertoproject.user = :userId', { userId })
+      .andWhere('usertoproject.project = :projectId', { projectId })
+      .innerJoinAndSelect('usertoproject.user', 'user')
       .getOne();
-    usertoprojectRepository.remove(await usertoproject);
-    return usertoproject;
+    if (utp) {
+      await usertoprojectRepository.delete({
+        user,
+        project,
+      });
+      return utp;
+    }
+    return new Error('User not in project');
   }
 
   @Mutation((returns) => UserToProject)
