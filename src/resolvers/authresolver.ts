@@ -1,15 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-/* eslint-disable class-methods-use-this */
-import { Resolver, Mutation, Arg } from 'type-graphql';
+import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
+import { Context } from 'apollo-server-core';
+import * as Cookie from "js-cookie";
 import User from '../entity/User';
 import UserResponse from '../types/UserResponse';
+import ContextResponse from '../types/ContextResponse';
+
+
+
+
+
 
 @Resolver(User)
 export default class AuthResolver {
-  @Mutation((returns) => UserResponse)
-  async login(@Arg('email') email: string, @Arg('password') password: string) {
+  @Mutation(() => UserResponse)
+  // eslint-disable-next-line class-methods-use-this
+  async login(@Arg('email') email: string, @Arg('password') password: string, @Ctx() ctx: ContextResponse) {
+
     if (!email || !password)
       return {
         statusCode: 400,
@@ -36,21 +43,29 @@ export default class AuthResolver {
 
     // @ts-ignore
     const token = userToFind.generateToken();
+
+    const cookie = `user-token=${token}; HttpOnly`
+     ctx.res.setHeader("Set-Cookie", [cookie])
+
     return {
       statusCode: 201,
       message: 'Connection réussie',
-      token,
     };
   }
 
-  @Mutation((returns) => UserResponse)
+  @Mutation(() => UserResponse)
+  // eslint-disable-next-line class-methods-use-this
   async register(
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Arg('lastname') lastname: string,
-    @Arg('firstname') firstname: string
+    @Arg('firstname') firstname: string,
+    @Arg('age') age: number,
+    @Ctx() ctx:Context
   ) {
-    if (!email || !password || !lastname || !firstname)
+
+
+    if (!email || !password || !lastname || !firstname || !age)
       throw new Error('Veuillez remplir correctement le formulaire');
 
     const userRepository: Repository<User> = getRepository(User);
@@ -72,13 +87,31 @@ export default class AuthResolver {
 
       // @ts-ignore
       const token = user.generateToken();
+      ctx['result'].cookie('user-token', token)
       return {
         statusCode: 201,
         message: 'Merci pour votre inscription',
-        token,
       };
     } catch (e) {
       return e;
     }
+  }
+
+  @Query(() => UserResponse)
+  async logout(@Ctx() ctx: ContextResponse){
+
+    try {
+      ctx.res.clearCookie("user-token")
+      return {
+        statusCode: 201,
+        message: 'Déconnexion',
+      };
+    }catch (e) {
+      return {
+        statusCode: 400,
+        message: 'Erreur lors de la déconnexion',
+      };
+    }
+
   }
 }
