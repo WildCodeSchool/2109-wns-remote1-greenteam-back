@@ -23,7 +23,7 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Mutation {
-  addUserToProject(project: ProjectInput!, role: UserRole!, user: UserInput!): UserToProject!
+  addUserToProject(projectId: String!, role: UserRole!, userId: String!): UserToProject!
   createComment(content: String!, ticket: TicketInput!, user: UserInput!): Comment!
   createNotification(description: String!, title: String!, user: UserInput!): Notification!
   createProject(description: String!, end_date: DateTime!, picture: String!, start_date: DateTime!, title: String!): Project!
@@ -37,15 +37,14 @@ type Mutation {
   deleteComment(id: Float!): Comment!
   deleteNotification(id: Float!, user: UserInput!): Notification!
   deleteProject(id: Float!): Project!
-  deleteRoleOfUserByProject(project: ProjectInput!, user: UserInput!): UserToProject!
   deleteSprint(id: Float!): Sprint!
   deleteTicket(id: Float!): Ticket!
   deleteUser(id: ID!): User!
   login(email: String!, password: String!): UserResponse!
   register(email: String!, firstname: String!, lastname: String!, password: String!): UserResponse!
-  removeUserFromProject(project: ProjectInput!, user: UserInput!): UserToProject!
+  removeUserFromProject(projectId: String!, userId: String!): UserToProject!
   updateComment(content: String!, id: Float!, user: UserInput!): Comment!
-  updateRoleOfUserByProject(project: ProjectInput!, role: UserRole!, user: UserInput!): UserToProject!
+  updateRoleOfUserByProject(projectId: String!, role: UserRole!, userId: String!): UserToProject!
   updateSprint(end_date: DateTime!, id: Float!, start_date: DateTime!, tickets: [TicketInput!]!): Sprint!
   updateTicket(description: String!, estimated_timeframe: DateTime!, id: Float!, project: ProjectInput!, sprint: SprintInput!, status: Float!, title: String!): Ticket!
   updateUser(email: String!, firstname: String!, lastname: String!, password: String!): User!
@@ -150,21 +149,25 @@ input TicketInput {
 }
 
 type User {
+  admin: Boolean!
   comments: [Comment!]!
   email: String!
   firstName: String!
   id: ID!
   lastName: String!
   notifications: [Notification!]!
+  picture: String!
 }
 
 input UserInput {
+  admin: Boolean!
   comments: [CommentInput!]!
   email: String!
   firstName: String!
   id: ID!
   lastName: String!
   notifications: [NotificationInput!]!
+  picture: String!
 }
 
 type UserResponse {
@@ -175,7 +178,6 @@ type UserResponse {
 
 """The basic roles"""
 enum UserRole {
-  ADMIN
   DEVELOPER
   PRODUCT_MANAGER
 }
@@ -188,11 +190,13 @@ type UserToProject {
 }
 
 type UserWithRole {
+  admin: Boolean!
   comments: [Comment!]!
   email: String!
   firstName: String!
   id: ID!
   lastName: String!
   notifications: [Notification!]!
+  picture: String!
   role: String!
 }

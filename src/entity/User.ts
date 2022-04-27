@@ -27,8 +27,17 @@ export default class User {
   @Column()
   email: string;
 
+  @Field()
+  @Column()
+  admin: boolean;
+
+  @Field()
+  @Column()
+  picture: string;
+
   @Column()
   password: string;
+
 
   @Field((type) => [Notification])
   @OneToMany(() => Notification, (notification) => notification.user, {
