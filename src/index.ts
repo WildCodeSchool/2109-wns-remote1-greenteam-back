@@ -3,7 +3,7 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import * as express from 'express';
-import * as cors from "cors"
+import * as cors from 'cors';
 import * as http from 'http';
 import * as cookieParser from 'cookie-parser';
 import initConnectDb from './database/database';
@@ -20,26 +20,28 @@ async function bootstrap() {
   // @ts-ignore
   const app = express();
   app.use(cookieParser());
-  app.use(cors({
-    origin: ["http://localhost:3000", "https://studio.apollographql.com"],
-    credentials: true,
-    allowedHeaders: ["apollographql-client-name", 'Content-Type'],
-
-  }))
+  app.use(
+    cors({
+      origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
+      credentials: true,
+      allowedHeaders: ['apollographql-client-name', 'Content-Type'],
+    })
+  );
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     schema,
-    context: ({req, res}) => ({
+    context: ({ req, res }) => ({
       req,
-      res
+      res,
     }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();
   server.applyMiddleware({ app, cors: false });
-  await new Promise<void>(resolve => httpServer.listen({ port }, resolve));
-  console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
-
+  await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+  );
 }
 
 bootstrap();

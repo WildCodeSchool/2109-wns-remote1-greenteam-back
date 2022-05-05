@@ -82,7 +82,7 @@ export default class AuthResolver {
 
       // @ts-ignore
       const token = user.generateToken();
-      ctx['result'].cookie('user-token', token);
+      ctx.result.cookie('user-token', token);
       return {
         statusCode: 201,
         message: 'Merci pour votre inscription',

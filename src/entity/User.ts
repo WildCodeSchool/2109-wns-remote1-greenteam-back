@@ -38,7 +38,6 @@ export default class User {
   @Column()
   password: string;
 
-
   @Field((type) => [Notification])
   @OneToMany(() => Notification, (notification) => notification.user, {
     cascade: true,

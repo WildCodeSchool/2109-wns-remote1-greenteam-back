@@ -6,9 +6,9 @@ import ProjectResolver from './projectresolver';
 import SprintResolver from './sprintresolver';
 import UserToProjectResolver from './usertoprojectresolver';
 import TicketResolver from './ticketresolver';
-import VerifyResolver from "./Verify"
+import VerifyResolver from './Verify';
 
-const resolversGQL  = [
+const resolversGQL = [
   UserResolver,
   AuthResolver,
   CommentResolver,
@@ -17,7 +17,7 @@ const resolversGQL  = [
   SprintResolver,
   UserToProjectResolver,
   TicketResolver,
-  VerifyResolver
+  VerifyResolver,
 ];
 
 export default resolversGQL;
