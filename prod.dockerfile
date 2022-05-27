@@ -8,8 +8,8 @@ COPY ./yarn.lock ./
 RUN yarn
 
 COPY ./tsconfig.json ./
-COPY ./ormconfig.ts ./
 COPY ./src ./src
+COPY ./ormconfig.ts ./src/
 
 RUN yarn build
 
