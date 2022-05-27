@@ -13,4 +13,4 @@ COPY ./src ./src
 
 RUN yarn build
 
-CMD cd dist && node ./index.js
+CMD cd build && node ./index.js
