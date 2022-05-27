@@ -9,7 +9,7 @@ RUN yarn
 
 COPY ./tsconfig.json ./
 COPY ./src ./src
-COPY ./ormconfig.ts ./src/
+COPY ./ormconfig.ts ./
 
 RUN yarn build
 

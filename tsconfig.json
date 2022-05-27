@@ -14,8 +14,11 @@
       "sourceMap": true,
       "allowSyntheticDefaultImports": true
    },
-   "exclude": [
-      "src/tests/**/*",
+   "include": [
+      "src/**/*",
       "ormconfig.ts"
+   ],
+   "exclude": [
+      "src/tests/**/*"
    ]
 }
