@@ -1,4 +1,4 @@
-import { ForbiddenError } from 'apollo-server';
+import { ForbiddenError } from 'apollo-server-core';
 import * as jwt from 'jsonwebtoken';
 
 function verifyToken(token, origin) {
@@ -15,7 +15,6 @@ function verifyToken(token, origin) {
       break;
   }
 
-  console.log(token);
   if (!token) throw new ForbiddenError('Accés refusé');
   const payloadToken = jwt.verify(token, key);
   if (!payloadToken) {

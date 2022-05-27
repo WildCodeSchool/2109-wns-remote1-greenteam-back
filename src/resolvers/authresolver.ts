@@ -1,7 +1,5 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { getRepository, Repository } from 'typeorm';
-import { Context } from 'apollo-server-core';
-import * as Cookie from 'js-cookie';
 import User from '../entity/User';
 import UserResponse from '../types/UserResponse';
 import ContextResponse from '../types/ContextResponse';
@@ -58,7 +56,7 @@ export default class AuthResolver {
     @Arg('password') password: string,
     @Arg('lastname') lastname: string,
     @Arg('firstname') firstname: string,
-    @Ctx() ctx: Context
+    @Ctx() ctx: ContextResponse
   ) {
     if (!email || !password || !lastname || !firstname)
       throw new Error('Veuillez remplir correctement le formulaire');
@@ -82,7 +80,7 @@ export default class AuthResolver {
 
       // @ts-ignore
       const token = user.generateToken();
-      ctx.result.cookie('user-token', token);
+      ctx.res.cookie('user-token', token);
       return {
         statusCode: 201,
         message: 'Merci pour votre inscription',
